@@ -5,7 +5,6 @@ import { Web3Provider } from '@ethersproject/providers'
 import { VeramoWeb3Provider } from './web3/VeramoWeb3Provider'
 import { QueryClientProvider, QueryClient } from 'react-query'
 import { Web3ReactProvider } from '@web3-react/core'
-import { Web3 } from './web3/Web3'
 import SocialPosts from './SocialPosts'
 
 function getLibrary(provider: any): Web3Provider {

@@ -57,15 +57,15 @@ export class Web3KeyManagementSystem extends AbstractKeyManagementSystem {
     key: IKey
     data: string
   }): Promise<EcdsaSignature | string> {
-    const domain = {}
-    const types = {
-      CustomType: [
-        { name: 'post', type: 'string' },
-      ],
-    }
-    const value = {
-      post: 'hello world',
-    }
+    // const domain = {}
+    // const types = {
+    //   CustomType: [
+    //     { name: 'post', type: 'string' },
+    //   ],
+    // }
+    // const value = {
+    //   post: 'hello world',
+    // }
 
     const p = await this.provider as any
     const web3Provider = new providers.Web3Provider(p)
