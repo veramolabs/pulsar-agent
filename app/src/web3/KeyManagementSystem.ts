@@ -57,23 +57,13 @@ export class Web3KeyManagementSystem extends AbstractKeyManagementSystem {
     key: IKey
     data: string
   }): Promise<EcdsaSignature | string> {
-    // const domain = {}
-    // const types = {
-    //   CustomType: [
-    //     { name: 'post', type: 'string' },
-    //   ],
-    // }
-    // const value = {
-    //   post: 'hello world',
-    // }
-
     const p = await this.provider as any
     const web3Provider = new providers.Web3Provider(p)
 
+    //FIXME this is mock signature just to explain the concept
+    const payload=atob(data.split('.')[1])
+    const signature = await web3Provider.getSigner().signMessage(JSON.stringify(JSON.parse(payload),null, 2))
+    return 'WEB3' + signature
 
-    // await web3Provider.getSigner()._signTypedData(domain, types, value)
-    await web3Provider.getSigner().signMessage(data)
-
-    return 'aaa'
   }
 }

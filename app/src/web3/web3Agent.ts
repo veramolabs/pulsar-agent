@@ -24,6 +24,8 @@ import { getResolver as webDidResolver } from 'web-did-resolver'
 import { EthrDIDProvider } from '@veramo/did-provider-ethr'
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { ProfileManager } from './ProfileManager'
+import { Web3JwtMessageHandler } from './Web3JWTMessageHandler'
+import { DataStore } from './data-store'
 export async function createWeb3Agent({
   connector,
   chainId,
@@ -41,6 +43,7 @@ export async function createWeb3Agent({
       name: `Web3 injected ${chainId}`,
     },
     plugins: [
+      new DataStore(),
       new DIDResolverPlugin({
         resolver: new Resolver({
           ethr: ethrDidResolver({
@@ -74,6 +77,7 @@ export async function createWeb3Agent({
         messageHandlers: [
           new DIDCommMessageHandler(),
           new JwtMessageHandler(),
+          new Web3JwtMessageHandler(),
           new W3cMessageHandler(),
           new SdrMessageHandler(),
         ],

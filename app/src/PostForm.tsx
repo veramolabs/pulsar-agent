@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Button, Form, Input, Select, notification, Progress } from 'antd'
 import { useVeramo } from '@veramo-community/veramo-react'
-import { IDIDManager, IDataStore, TAgent } from '@veramo/core'
+import { IDIDManager, IDataStore, TAgent, IMessageHandler } from '@veramo/core'
 import shortId from 'shortid'
 import { IProfileManager } from './web3/ProfileManager'
 import { useQuery } from 'react-query'
@@ -18,8 +18,8 @@ interface FormValues {
 }
 
 const Module: React.FC<Props> = (props: Props) => {
-  const { getAgent } = useVeramo<IDIDManager & IDataStore & IProfileManager>()
-  let agent: TAgent<IDIDManager & IDataStore & IProfileManager>
+  const { getAgent } = useVeramo<IDIDManager & IDataStore & IProfileManager & IMessageHandler>()
+  let agent: TAgent<IDIDManager & IDataStore & IProfileManager & IMessageHandler>
   try {
     agent = getAgent('web3Agent')
 
@@ -76,31 +76,32 @@ const Module: React.FC<Props> = (props: Props) => {
             articleBody: values.articleBody
           },
         },
-        proofFormat: 'jwt',
+        proofFormat: 'jwt'
       })
 
       setProgress(80)
 
 
-        try {
-          await agent?.sendMessageDIDCommAlpha1({
-            data: {
-              from: values.from,
-              to: 'did:web:pulsar.veramo.io',
-              body: verifiableCredential.proof.jwt,
-              type: 'jwt'
-            }
-          })
-          notification.success({
-            message: 'Message sent to: did:web:pulsar.veramo.io'
-          })
-        } catch (e) {
-          notification.error({
-            message: e.message
-          })
-          setProgressStatus('exception')
+      try {
+        await agent?.sendMessageDIDCommAlpha1({
+          data: {
+            from: values.from,
+            to: 'did:web:pulsar.veramo.io',
+            body: verifiableCredential.proof.jwt,
+            type: 'jwt'
+          }
+        })
 
-        }
+        notification.success({
+          message: 'Message sent to: did:web:pulsar.veramo.io'
+        })
+      } catch (e) {
+        notification.error({
+          message: e.message
+        })
+        setProgressStatus('exception')
+
+      }
 
 
     } catch (e) {
