@@ -51,7 +51,7 @@ const Stream = () => {
                 Date.parse(item.verifiableCredential.issuanceDate)
               )} ago`}
             />
-            <div style={{ paddingTop: 15, fontSize: "1rem" }}>
+            <div style={{ paddingTop: 15, fontSize: "1rem", marginLeft: 72 }}>
               {item.verifiableCredential.credentialSubject?.articleBody}
             </div>
           </Card>

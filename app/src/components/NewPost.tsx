@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Input, notification, Progress, Card } from "antd";
 import { useVeramo } from "@veramo-community/veramo-react";
-import { IDIDManager, IDataStore, TAgent } from "@veramo/core";
+import { IDIDManager, IDataStore, TAgent, IMessageHandler } from "@veramo/core";
 import shortId from "shortid";
 import { IProfileManager } from "../web3/ProfileManager";
 import { useQuery } from "react-query";
@@ -18,8 +18,12 @@ interface PostValues {
 }
 
 const NewPost: React.FC<Props> = (props: Props) => {
-  const { getAgent } = useVeramo<IDIDManager & IDataStore & IProfileManager>();
-  let agent: TAgent<IDIDManager & IDataStore & IProfileManager>;
+  const { getAgent } = useVeramo<
+    IDIDManager & IDataStore & IProfileManager & IMessageHandler
+  >();
+  let agent: TAgent<
+    IDIDManager & IDataStore & IProfileManager & IMessageHandler
+  >;
   try {
     agent = getAgent("web3Agent");
   } catch (e) {
@@ -87,6 +91,7 @@ const NewPost: React.FC<Props> = (props: Props) => {
             type: "jwt",
           },
         });
+
         notification.success({
           message: "Message sent to: did:web:pulsar.veramo.io",
         });
@@ -105,7 +110,9 @@ const NewPost: React.FC<Props> = (props: Props) => {
     setProgress(100);
 
     setTimeout(() => {
+      setPostContent("");
       setProgress(undefined);
+
       if (props.onFinish) {
         props.onFinish();
       }
@@ -135,6 +142,7 @@ const NewPost: React.FC<Props> = (props: Props) => {
               style={{ border: 0, fontSize: 25 }}
               placeholder={"Hey, What's up?"}
               onChange={(e) => setPostContent(e.target.value)}
+              value={postContent}
             ></Input.TextArea>
           }
         />
