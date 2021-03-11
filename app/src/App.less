@@ -1,1 +1,41 @@
-@import '~antd/dist/antd.dark.less';
+@import "~antd/dist/antd.dark.less";
+
+html {
+  overflow-y: scroll;
+  overscroll-behavior-y: none;
+  font-size: 15px;
+}
+
+.main-content-container {
+  max-width: 1300px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.ant-menu {
+  background-color: transparent;
+  border: 0;
+}
+
+.ant-card {
+  background-color: transparent;
+}
+
+.ant-card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.ant-avatar-lg {
+  width: 55px;
+  height: 55px;
+}
+
+h4.ant-list-item-meta-title {
+  font-size: 1.1rem;
+}
+
+#root {
+  height: 100%;
+}
