@@ -190,6 +190,7 @@ messageHandler:
     - messageHandlers:
         - $require: '@veramo/did-comm#DIDCommMessageHandler'
         - $require: '@veramo/did-jwt#JwtMessageHandler'
+        - $require: './build/Web3JWTMessageHandler#Web3JwtMessageHandler'
         - $require: '@veramo/credential-w3c#W3cMessageHandler'
         - $require: '@veramo/selective-disclosure#SdrMessageHandler'
 
