@@ -18,9 +18,9 @@ const Page: React.FC<PageProps> = ({ children, header, rightContent }) => {
             <div
               style={{
                 padding: "15px 15px 10px 15px",
-                borderBottom: "1px solid #4c4c4c",
-                borderLeft: "1px solid #4c4c4c",
-                borderRight: "1px solid #4c4c4c",
+                borderBottom: "1px solid #2b2b2b",
+                borderLeft: "1px solid #2b2b2b",
+                borderRight: "1px solid #2b2b2b",
               }}
             >
               {header}
@@ -28,8 +28,8 @@ const Page: React.FC<PageProps> = ({ children, header, rightContent }) => {
             <div
               style={{
                 height: "100%",
-                borderLeft: "1px solid #4c4c4c",
-                borderRight: "1px solid #4c4c4c",
+                borderLeft: "1px solid #2b2b2b",
+                borderRight: "1px solid #2b2b2b",
               }}
             >
               {children}

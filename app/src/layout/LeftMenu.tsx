@@ -22,38 +22,20 @@ const { Title, Text } = Typography;
 
 const mainMenu = [
   {
+    url: "/home",
+    label: "# Home",
+    icon: UserOutlined,
+    private: true,
+  },
+  {
     url: "/",
     label: "# Explore",
     icon: EyeOutlined,
+    private: false,
   },
-  //   {
-  //     url: "/identifiers",
-  //     label: "Identifiers",
-  //     icon: UserOutlined,
-  //   },
-  //   {
-  //     url: "/credentials",
-  //     label: "Credentials",
-  //     icon: SafetyOutlined,
-  //   },
-  //   {
-  //     url: "/messages",
-  //     label: "Messages",
-  //     icon: MessageOutlined,
-  //   },
-  //   {
-  //     url: "/network",
-  //     label: "Network",
-  //     icon: DeploymentUnitOutlined,
-  //   },
-  //   {
-  //     url: "/discover",
-  //     label: "Discover",
-  //     icon: SearchOutlined,
-  //   },
 ];
 
-const SideMenu = () => {
+const SideMenu: React.FC<any> = ({ web3Agent }) => {
   return (
     <div
       style={{
@@ -67,18 +49,18 @@ const SideMenu = () => {
         <img src={logo} style={{ height: 30 }} />
       </div>
       <Menu className="main-menu" mode="inline" defaultSelectedKeys={["4"]}>
-        <div style={{ paddingLeft: 15, marginTop: 30 }}>
-          {mainMenu.map((menuItem) => {
-            return (
+        {mainMenu.map((menuItem) => {
+          return (
+            (web3Agent || !menuItem.private) && (
               <Menu.Item
                 key={menuItem.label}
                 style={{ fontSize: 20, fontWeight: 600 }}
               >
                 <Link to={menuItem.url}>{menuItem.label}</Link>
               </Menu.Item>
-            );
-          })}
-        </div>
+            )
+          );
+        })}
       </Menu>
     </div>
   );
