@@ -86,6 +86,12 @@ server:
   port:
     $ref: /constants/port
   use:
+    # Frontend app
+    - - /
+      - $require: express?t=function#static
+        $args:
+          - ./app/build
+
     # CORS
     - - $require: 'cors'
 
