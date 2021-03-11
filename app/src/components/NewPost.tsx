@@ -1,23 +1,23 @@
-import React, { useState } from "react";
-import { Button, Form, Input, Select, notification, Progress } from "antd";
+import React, { useEffect, useState } from "react";
+import { Button, Input, notification, Progress, Card } from "antd";
 import { useVeramo } from "@veramo-community/veramo-react";
 import { IDIDManager, IDataStore, TAgent, IMessageHandler } from "@veramo/core";
 import shortId from "shortid";
-import { IProfileManager } from "./web3/ProfileManager";
+import { IProfileManager } from "../web3/ProfileManager";
 import { useQuery } from "react-query";
-import IdentifierProfileSelectOption from "./IdentifierProfileSelectOption";
+import IdentifierSelect from "../components/IdentifierSelect";
 
 interface Props {
   id?: string;
   onFinish?: () => void;
 }
 
-interface FormValues {
+interface PostValues {
   from: string;
   articleBody: string;
 }
 
-const Module: React.FC<Props> = (props: Props) => {
+const NewPost: React.FC<Props> = (props: Props) => {
   const { getAgent } = useVeramo<
     IDIDManager & IDataStore & IProfileManager & IMessageHandler
   >();
@@ -30,6 +30,8 @@ const Module: React.FC<Props> = (props: Props) => {
     console.log(e.message);
   }
 
+  const [selectedDid, setSelectedDid] = useState<string>();
+  const [postContent, setPostContent] = useState<string>();
   const [progressStatus, setProgressStatus] = useState<
     "active" | "exception" | undefined
   >(undefined);
@@ -40,21 +42,22 @@ const Module: React.FC<Props> = (props: Props) => {
     () => agent?.didManagerFind()
   );
 
-  const initialValues: FormValues = {
-    from: "",
-    articleBody: "",
-  };
+  useEffect(() => {
+    if (identifiers && selectedDid === undefined) {
+      setSelectedDid(identifiers[0].did);
+    }
+  }, [selectedDid]);
 
-  const createPost = async (values: FormValues) => {
+  const createPost = async () => {
     setProgressStatus("active");
     setProgress(20);
     try {
-      const profile = await agent?.getProfile({ did: values.from });
+      const profile = await agent?.getProfile({ did: selectedDid });
       const credentialId = "https://pulsar.veramo.io/posts/" + shortId();
 
       const verifiableCredential = await agent?.createVerifiableCredential({
         credential: {
-          issuer: { id: values.from },
+          issuer: { id: selectedDid },
           "@context": [
             "https://www.w3.org/2018/credentials/v1",
             "https://www.w3id.org/veramolabs/socialmedia/context/v1",
@@ -66,12 +69,12 @@ const Module: React.FC<Props> = (props: Props) => {
             id: credentialId,
             type: "SocialMediaPosting",
             author: {
-              id: values.from,
+              id: selectedDid,
               image: profile?.picture,
               name: profile?.name,
             },
             headline: "",
-            articleBody: values.articleBody,
+            articleBody: postContent,
           },
         },
         proofFormat: "jwt",
@@ -82,7 +85,7 @@ const Module: React.FC<Props> = (props: Props) => {
       try {
         await agent?.sendMessageDIDCommAlpha1({
           data: {
-            from: values.from,
+            from: selectedDid,
             to: "did:web:pulsar.veramo.io",
             body: verifiableCredential.proof.jwt,
             type: "jwt",
@@ -107,54 +110,71 @@ const Module: React.FC<Props> = (props: Props) => {
     setProgress(100);
 
     setTimeout(() => {
+      setPostContent("");
       setProgress(undefined);
+
       if (props.onFinish) {
         props.onFinish();
       }
     }, 1000);
   };
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
-  };
-
   return (
-    <Form
-      name="basic"
-      initialValues={initialValues}
-      onFinish={createPost}
-      onFinishFailed={onFinishFailed}
-    >
-      <Form.Item
-        name="from"
-        rules={[{ required: true, message: "Please select From!" }]}
+    <div style={{ position: "relative" }}>
+      <Card
+        loading={isLoadingIdentifiers || !selectedDid}
+        bordered={false}
+        style={{ borderBottom: "1px solid #2b2b2b" }}
       >
-        <Select loading={isLoadingIdentifiers}>
-          {identifiers?.map((i) => (
-            <Select.Option value={i.did} key={i.did}>
-              <IdentifierProfileSelectOption did={i.did} />
-            </Select.Option>
-          ))}
-        </Select>
-      </Form.Item>
-
-      <Form.Item
-        name="articleBody"
-        rules={[{ required: true, message: "Please input Article body!" }]}
-      >
-        <Input.TextArea />
-      </Form.Item>
-
-      <Form.Item>
-        {progress === undefined && (
-          <Button type="primary" htmlType="submit">
-            Post
+        <Card.Meta
+          avatar={
+            identifiers && (
+              <IdentifierSelect
+                identifiers={identifiers}
+                did={selectedDid}
+                setSelectedDid={setSelectedDid}
+              />
+            )
+          }
+          description={
+            <Input.TextArea
+              rows={1}
+              style={{ border: 0, fontSize: 25 }}
+              placeholder={"Hey, What's up?"}
+              onChange={(e) => setPostContent(e.target.value)}
+              value={postContent}
+            ></Input.TextArea>
+          }
+        />
+        <div
+          style={{
+            marginTop: 15,
+            display: "flex",
+            justifyContent: "flex-end",
+            flex: 1,
+          }}
+        >
+          <Button
+            disabled={!postContent}
+            type="primary"
+            size="large"
+            shape="round"
+            style={{ width: 100 }}
+            onClick={() => createPost()}
+          >
+            <b>Say it</b>
           </Button>
-        )}
-        {progress && <Progress percent={progress} status={progressStatus} />}
-      </Form.Item>
-    </Form>
+        </div>
+      </Card>
+      <Progress
+        style={{ position: "absolute", bottom: -5 }}
+        strokeLinecap="square"
+        percent={progress}
+        showInfo={false}
+        status={progressStatus}
+      />{" "}
+    </div>
   );
 };
 
-export default Module;
+export default NewPost;
