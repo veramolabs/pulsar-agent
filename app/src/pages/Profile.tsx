@@ -22,8 +22,8 @@ const Post = () => {
     {
       enabled: !!did,
       initialData: {
-        did: did,
-        name: did,
+        did: "",
+        name: "",
         nickname: did,
         picture: "",
         currentOwner: { user: { username: "" } },

@@ -83,9 +83,11 @@ const Stream: React.FC<Props> = ({ setRefetch, refetch }) => {
               }
               title={
                 <a
-                  href={
-                    "/profile/" +
-                    item.verifiableCredential.credentialSubject.author?.id
+                  onClick={() =>
+                    history.push(
+                      "/profile/" +
+                        item.verifiableCredential.credentialSubject.author?.id
+                    )
                   }
                 >
                   {item.verifiableCredential.credentialSubject.author?.name}
