@@ -3,6 +3,13 @@ import { IDataStoreORM } from '@veramo/data-store'
 import parse from 'url-parse'
 import md5 from 'md5'
 
+function timeoutResolver(ms: number) {
+  return new Promise((resolve, reject) => {
+    setTimeout(function () {
+      resolve(true);
+    }, ms);
+  });
+}
 export interface IProfile {
   did: string
   name?: string
@@ -49,7 +56,19 @@ export class ProfileManager implements IAgentPlugin {
 
     if (args.did.substr(0, 7) === 'did:nft') {
       const split = args.did.split(':')
-      const asset = await (await fetch(`https://api.opensea.io/api/v1/asset/${split[3]}/${split[4]}/`)).json()
+      let asset: any
+      const res = await fetch(`https://api.opensea.io/api/v1/asset/${split[3]}/${split[4]}/`)
+      if (res.status !== 429) {
+        asset = await res.json()
+      } else {
+        console.log('trying again')
+        await timeoutResolver(2000)
+        const res = await fetch(`https://api.opensea.io/api/v1/asset/${split[3]}/${split[4]}/`)
+        asset = await res.json()
+
+      }
+
+
   
       return {
         did: args.did,

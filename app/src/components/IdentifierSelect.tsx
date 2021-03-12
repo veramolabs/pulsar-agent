@@ -59,8 +59,6 @@ const Module: React.FC<Props> = ({ did, identifiers, setSelectedDid }) => {
     }
   );
 
-  console.log(identifiers);
-
   return (
     <div
       style={{ position: "relative" }}
@@ -81,7 +79,7 @@ const Module: React.FC<Props> = ({ did, identifiers, setSelectedDid }) => {
         {identifiers.map((item) => {
           return (
             item.did !== did &&
-            selectionMode && <Profile did={item.did} onClick={setSelectedDid} />
+            selectionMode && <Profile key={item.did} did={item.did} onClick={setSelectedDid} />
           );
         })}
       </div>
