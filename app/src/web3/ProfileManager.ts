@@ -61,7 +61,6 @@ export class ProfileManager implements IAgentPlugin {
       if (res.status !== 429) {
         asset = await res.json()
       } else {
-        console.log('trying again')
         await timeoutResolver(2000)
         const res = await fetch(`https://api.opensea.io/api/v1/asset/${split[3]}/${split[4]}/`)
         asset = await res.json()
