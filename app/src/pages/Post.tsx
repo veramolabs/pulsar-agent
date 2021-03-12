@@ -4,7 +4,7 @@ import Page from "../layout/Page";
 
 import Connect from "../components/Connect";
 
-import { Avatar, Card, List, Row, Skeleton } from "antd";
+import { Avatar, Card, Row, Skeleton } from "antd";
 import { useQuery } from "react-query";
 import { useVeramo } from "@veramo-community/veramo-react";
 import { formatDistanceToNow } from "date-fns";
@@ -36,8 +36,6 @@ const Post = () => {
       </Layout>
     );
   };
-
-  console.log(post);
 
   return (
     <Page

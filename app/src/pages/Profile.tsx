@@ -1,21 +1,12 @@
 import React from "react";
 import { Typography, Layout } from "antd";
 import Page from "../layout/Page";
-
 import Connect from "../components/Connect";
-
-import { Avatar, Card, List, Row, Skeleton, Button } from "antd";
+import { Avatar, Card, Row, Button } from "antd";
 import { useQuery } from "react-query";
 import { useVeramo } from "@veramo-community/veramo-react";
-import { formatDistanceToNow } from "date-fns";
 import { useParams, useHistory } from "react-router-dom";
-
-import {
-  ArrowLeftOutlined,
-  SettingOutlined,
-  EditOutlined,
-  EllipsisOutlined,
-} from "@ant-design/icons";
+import { ArrowLeftOutlined } from "@ant-design/icons";
 
 const { Title } = Typography;
 
@@ -47,8 +38,6 @@ const Post = () => {
       </Layout>
     );
   };
-
-  console.log(data);
 
   return (
     <Page
