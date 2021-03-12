@@ -134,7 +134,7 @@ const NewPost: React.FC<Props> = (props: Props) => {
           description={
             <Input.TextArea
               rows={1}
-              style={{ border: 0, fontSize: 25 }}
+              style={{ border: 0, fontSize: 25, marginLeft: 80 }}
               placeholder={"Hey, What's up?"}
               onChange={(e) => setPostContent(e.target.value)}
               value={postContent}
