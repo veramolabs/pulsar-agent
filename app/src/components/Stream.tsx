@@ -1,9 +1,13 @@
 import React from "react";
-import { Avatar, Card, List } from "antd";
+import { Avatar, Card, Dropdown, List, Menu } from "antd";
 import { useQuery } from "react-query";
 import { useVeramo } from "@veramo-community/veramo-react";
 import { formatDistanceToNow } from "date-fns";
-
+import {
+  MoreOutlined,
+  EuroOutlined,
+  CodeOutlined
+} from "@ant-design/icons";
 const Stream = () => {
   const { getAgent } = useVeramo();
   const agent = getAgent("clientAgent");
@@ -27,7 +31,24 @@ const Stream = () => {
       itemLayout="horizontal"
       dataSource={credentials}
       renderItem={(item) => (
-        <List.Item>
+        <List.Item actions={[
+
+          <Dropdown overlay={<Menu>
+            <Menu.Item key="0" icon={<CodeOutlined />}>
+              <a href="/">Show credential</a>
+            </Menu.Item>
+            {item.verifiableCredential.issuer.id.split(':')[1] === 'nft' && <Menu.Item key="1" icon={<EuroOutlined />}>
+              <a 
+                target='_blank'
+                rel="noreferrer"
+                href={`https://opensea.io/assets/${item.verifiableCredential.issuer.id.split(':')[3]}/${item.verifiableCredential.issuer.id.split(':')[4]}`}
+                >Asset details</a>
+            </Menu.Item>}
+          </Menu>} 
+          trigger={['click']}>
+              <MoreOutlined />
+          </Dropdown>
+        ]}>
           <Card bordered={false} style={{ width: "100%" }}>
             <List.Item.Meta
               avatar={
@@ -38,11 +59,7 @@ const Stream = () => {
                   size="large"
                 />
               }
-              title={
-                <a href={"/credential/" + item.hash}>
-                  {item.verifiableCredential.credentialSubject.author?.name}
-                </a>
-              }
+              title={item.verifiableCredential.credentialSubject.author?.name}
               description={`${formatDistanceToNow(
                 Date.parse(item.verifiableCredential.issuanceDate)
               )} ago`}
