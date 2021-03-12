@@ -1,10 +1,10 @@
 import React from "react";
-import { Typography, Card, Layout, Button, Row, Col } from "antd";
+import { Typography, Layout } from "antd";
 import Page from "../layout/Page";
 import Stream from "../components/Stream";
 import Connect from "../components/Connect";
 
-const { Title, Text } = Typography;
+const { Title} = Typography;
 
 const Explore = () => {
   const rightContent = () => {

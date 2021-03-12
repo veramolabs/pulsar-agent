@@ -1,6 +1,6 @@
 import React from "react";
 import { Redirect, Route } from "react-router-dom";
-import { Layout, Button, Popover, List, Col, Row } from "antd";
+import { Layout, Col, Row } from "antd";
 import LeftMenu from "./LeftMenu";
 import Explore from "../pages/Explore";
 import Home from "../pages/Home";

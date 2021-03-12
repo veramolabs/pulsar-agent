@@ -7,10 +7,6 @@ import { formatDistanceToNow } from "date-fns";
 const Stream = () => {
   const { getAgent } = useVeramo();
   const agent = getAgent("clientAgent");
-  let web3Agent;
-  try {
-    web3Agent = getAgent("web3Agent");
-  } catch (e) {}
 
   const { data: credentials } = useQuery(
     ["credentials", { agentId: agent?.context.name }],

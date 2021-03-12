@@ -12,11 +12,6 @@ interface Props {
   onFinish?: () => void;
 }
 
-interface PostValues {
-  from: string;
-  articleBody: string;
-}
-
 const NewPost: React.FC<Props> = (props: Props) => {
   const { getAgent } = useVeramo<
     IDIDManager & IDataStore & IProfileManager & IMessageHandler
@@ -46,7 +41,7 @@ const NewPost: React.FC<Props> = (props: Props) => {
     if (identifiers && selectedDid === undefined) {
       setSelectedDid(identifiers[0].did);
     }
-  }, [selectedDid]);
+  }, [selectedDid, identifiers]);
 
   const createPost = async () => {
     setProgressStatus("active");

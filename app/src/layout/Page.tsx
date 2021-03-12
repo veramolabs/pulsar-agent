@@ -1,6 +1,5 @@
-import React, { useState, useEffect, Suspense } from "react";
-import { Layout, Button, Popover, List, Col, Row } from "antd";
-import { FundViewOutlined } from "@ant-design/icons";
+import React from "react";
+import { Layout, Col, Row } from "antd";
 
 interface PageProps {
   name?: string;

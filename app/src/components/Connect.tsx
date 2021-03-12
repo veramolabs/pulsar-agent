@@ -9,7 +9,7 @@ import { UserRejectedRequestError as UserRejectedRequestErrorFrame } from "@web3
 import { Web3Provider } from "@ethersproject/providers";
 
 import { injected, walletconnect } from "../web3/connectors";
-import { Typography, Card, Layout, Button, Row, Col } from "antd";
+import { Typography, Card, Button } from "antd";
 const { Title, Text } = Typography;
 
 enum ConnectorNames {
@@ -41,7 +41,7 @@ function getErrorMessage(error: Error) {
 
 export default function Connect() {
   const context = useWeb3React<Web3Provider>();
-  const { connector, activate, deactivate, active, error } = context;
+  const { connector, activate, deactivate, error } = context;
 
   // handle logic to recognize the connector currently being activated
   const [activatingConnector, setActivatingConnector] = React.useState<any>();
@@ -49,13 +49,13 @@ export default function Connect() {
   const currentConnector = connectorsByName["Metamask"];
   const activating = currentConnector === activatingConnector;
   const connected = currentConnector === connector;
-  const disabled = !!activatingConnector || connected || !!error;
+  // const disabled = !!activatingConnector || connected || !!error;
 
-  //   React.useEffect(() => {
-  //     if (activatingConnector && activatingConnector === connector) {
-  //       setActivatingConnector(undefined);
-  //     }
-  //   }, [activatingConnector, connector]);
+    React.useEffect(() => {
+      if (activatingConnector && activatingConnector === connector) {
+        setActivatingConnector(undefined);
+      }
+    }, [activatingConnector, connector]);
 
   return connected ? (
     <Card>
@@ -82,11 +82,13 @@ export default function Connect() {
           type="primary"
           size="large"
           shape="round"
+          disabled={activating}
           style={{ width: "100%" }}
           onClick={() => activate(connectorsByName["Metamask"])}
         >
           Connect
         </Button>
+        {!!error && <h4 style={{ marginTop: '1rem', marginBottom: '0' }}>{getErrorMessage(error)}</h4>}
       </div>
     </Card>
   );
