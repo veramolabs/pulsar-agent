@@ -15,6 +15,7 @@ export interface IProfile {
   name?: string
   nickname?: string
   picture?: string
+  currentOwner?: any
 }
 
 type IContext = IAgentContext<IDataStoreORM>
@@ -65,6 +66,8 @@ export class ProfileManager implements IAgentPlugin {
         const res = await fetch(`https://api.opensea.io/api/v1/asset/${split[3]}/${split[4]}/`)
         asset = await res.json()
 
+        console.log('ASSET', asset)
+
       }
 
 
@@ -73,7 +76,8 @@ export class ProfileManager implements IAgentPlugin {
         did: args.did,
         name: asset?.name,
         nickname: asset?.description,
-        picture: asset?.image_preview_url
+        picture: asset?.image_preview_url,
+        currentOwner: asset?.top_ownerships[0].owner
       }
     }
 
