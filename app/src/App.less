@@ -3,6 +3,7 @@
 html {
   overflow-y: scroll;
   overscroll-behavior-y: none;
+  overscroll-behavior-x: none;
   font-size: 15px;
 }
 
@@ -15,6 +16,19 @@ html {
 .ant-menu {
   background-color: transparent;
   border: 0;
+}
+
+.main-menu {
+  margin-top: 20px;
+
+  .ant-menu-item {
+    padding-left: 16px !important;
+  }
+}
+
+.ant-menu-item {
+  display: flex;
+  align-items: center;
 }
 
 .ant-layout {
@@ -62,6 +76,7 @@ code {
 h4.ant-list-item-meta-title {
   font-size: 1.1rem;
   font-weight: 600;
+  overflow-wrap: anywhere;
 }
 
 #root {

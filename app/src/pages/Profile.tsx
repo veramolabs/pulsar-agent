@@ -69,30 +69,34 @@ const Post = () => {
               <div
                 style={{ flex: 1, display: "flex", justifyContent: "flex-end" }}
               >
-                <Button
-                  type="default"
-                  size="large"
-                  shape="round"
-                  onClick={() =>
-                    (window.location.href = `https://opensea.io/accounts/${data?.currentOwner.user.username}`)
-                  }
-                >
-                  View on OpenSea
-                </Button>
+                {data.currentOwner && (
+                  <Button
+                    type="default"
+                    size="large"
+                    shape="round"
+                    onClick={() =>
+                      (window.location.href = `https://opensea.io/accounts/${data?.currentOwner.user.username}`)
+                    }
+                  >
+                    View on OpenSea
+                  </Button>
+                )}
               </div>
               <div style={{ marginTop: -80, marginLeft: 20, marginBottom: 10 }}>
                 <Avatar src={data?.picture} size={150} />
               </div>
               <Title>{data?.name}</Title>
-              <p>
-                Owned by{" "}
-                <a
-                  href={`https://opensea.io/accounts/${data?.currentOwner.user.username}`}
-                >
-                  {data?.currentOwner.user.username}{" "}
-                </a>
-                on OpenSea
-              </p>
+              {data.currentOwner && (
+                <p>
+                  Owned by{" "}
+                  <a
+                    href={`https://opensea.io/accounts/${data?.currentOwner.user.username}`}
+                  >
+                    {data?.currentOwner.user.username}{" "}
+                  </a>
+                  on OpenSea
+                </p>
+              )}
             </div>
           )}
         </div>
