@@ -10,6 +10,7 @@ import IdentifierSelect from "../components/IdentifierSelect";
 interface Props {
   id?: string;
   onFinish?: () => void;
+  setRefetch: (refetch: boolean) => void;
 }
 
 const NewPost: React.FC<Props> = (props: Props) => {
@@ -107,6 +108,7 @@ const NewPost: React.FC<Props> = (props: Props) => {
     setTimeout(() => {
       setPostContent("");
       setProgress(undefined);
+      props.setRefetch(true);
 
       if (props.onFinish) {
         props.onFinish();
