@@ -86,6 +86,8 @@ server:
   port:
     $ref: /constants/port
   use:
+    # CORS
+    - - $require: 'cors'
 
     # Frontend app
     - - /
@@ -96,9 +98,6 @@ server:
     # Frontend app
     - - '/'
       - $require: './build/spa-router?t=function#SpaRouter'
-
-    # CORS
-    - - $require: 'cors'
 
     # Add agent to the request object
     - - $require: '@veramo/remote-server?t=function#RequestWithAgentRouter'
