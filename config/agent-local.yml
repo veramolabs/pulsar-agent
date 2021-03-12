@@ -95,9 +95,7 @@ server:
         $args:
           - ./app/build
 
-    # Frontend app
-    - - '/'
-      - $require: './build/spa-router?t=function#SpaRouter'
+
 
     # Add agent to the request object
     - - $require: '@veramo/remote-server?t=function#RequestWithAgentRouter'
@@ -167,7 +165,9 @@ server:
           - swaggerOptions:
               url: '/api'
     
-
+    # Frontend app
+    - - '/'
+      - $require: './build/spa-router?t=function#SpaRouter'
 
   # Execute during server initialization
   init:
