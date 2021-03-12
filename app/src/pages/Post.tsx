@@ -64,7 +64,7 @@ const Post = () => {
               }
               title={
                 <h4>
-                  <a href={"/profile/" + post?.hash}>
+                  <a href={"/profile/" + post?.credentialSubject.author?.id}>
                     {post?.credentialSubject.author?.name}
                   </a>
                 </h4>
