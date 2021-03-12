@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Avatar, Card, Dropdown, List, Menu } from "antd";
 import { useQuery } from "react-query";
 import { useVeramo } from "@veramo-community/veramo-react";
@@ -6,11 +6,16 @@ import { formatDistanceToNow } from "date-fns";
 import { MoreOutlined, EuroOutlined, CodeOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
 
-const Stream = () => {
+interface Props {
+  setRefetch?: (refetch: boolean) => void;
+  refetch?: boolean;
+}
+
+const Stream: React.FC<Props> = ({ setRefetch, refetch }) => {
   const { getAgent } = useVeramo();
   const agent = getAgent("clientAgent");
   const history = useHistory();
-  const { data: credentials } = useQuery(
+  const { data: credentials, refetch: refetchQuery } = useQuery(
     ["credentials", { agentId: agent?.context.name }],
     () =>
       agent?.dataStoreORMGetVerifiableCredentials({
@@ -24,7 +29,12 @@ const Stream = () => {
       })
   );
 
-  console.log(credentials);
+  useEffect(() => {
+    if (refetch) {
+      refetchQuery();
+      setRefetch && setRefetch(false);
+    }
+  }, [refetch]);
 
   return (
     <List

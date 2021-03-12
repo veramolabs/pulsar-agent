@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Typography, Layout } from "antd";
 import Page from "../layout/Page";
 import Stream from "../components/Stream";
@@ -8,6 +8,8 @@ import NewPost from "../components/NewPost";
 const { Title } = Typography;
 
 const Home = () => {
+  const [refetch, setRefetch] = useState<boolean>();
+
   const rightContent = () => {
     return (
       <Layout style={{ paddingLeft: 15, paddingTop: 15 }}>
@@ -25,8 +27,8 @@ const Home = () => {
       }
       rightContent={rightContent()}
     >
-      <NewPost />
-      <Stream />
+      <NewPost setRefetch={setRefetch} />
+      <Stream refetch={refetch} setRefetch={setRefetch} />
     </Page>
   );
 };
