@@ -101,6 +101,10 @@ server:
         $args:
           - ./app/build
 
+    # Frontend app
+    - - '/'
+      - $require: './build/spa-router?t=function#SpaRouter'
+
     # CORS
     - - $require: 'cors'
 
@@ -172,6 +176,7 @@ server:
             apiVersion: '1.0.0'
             exposedMethods:
               $ref: /constants/publicMethods
+
 
   # Execute during server initialization
   init:

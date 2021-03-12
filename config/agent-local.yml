@@ -86,11 +86,16 @@ server:
   port:
     $ref: /constants/port
   use:
+
     # Frontend app
     - - /
       - $require: express?t=function#static
         $args:
           - ./app/build
+
+    # Frontend app
+    - - '/'
+      - $require: './build/spa-router?t=function#SpaRouter'
 
     # CORS
     - - $require: 'cors'
@@ -162,6 +167,8 @@ server:
           - null
           - swaggerOptions:
               url: '/api'
+    
+
 
   # Execute during server initialization
   init:
