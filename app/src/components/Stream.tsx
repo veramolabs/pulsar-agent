@@ -4,7 +4,11 @@ import { useQuery } from "react-query";
 import { useVeramo } from "@veramo-community/veramo-react";
 import { formatDistanceToNow } from "date-fns";
 import { useHistory } from "react-router-dom";
-import { ShareAltOutlined } from '@ant-design/icons';
+import {
+  ShareAltOutlined,
+  HeartOutlined,
+  CommentOutlined,
+} from "@ant-design/icons";
 interface Props {
   setRefetch?: (refetch: boolean) => void;
   refetch?: boolean;
@@ -42,20 +46,53 @@ const Stream: React.FC<Props> = ({ setRefetch, refetch }) => {
       dataSource={credentials}
       renderItem={(item) => (
         <List.Item
+          className="main-post"
           actions={[
-            <Button 
-
+            <Button
               shape="circle"
-              icon={<ShareAltOutlined />} 
+              style={{ border: 0 }}
+              icon={<CommentOutlined />}
               onClick={async () => {
                 try {
-                  navigator.clipboard.writeText(`${item.verifiableCredential.id}`)
-                  notification.success({ message: 'URL copied!' })
-                } catch(err) {
-                  notification.error({ message: err.message })
+                  navigator.clipboard.writeText(
+                    `${item.verifiableCredential.id}`
+                  );
+                  notification.success({ message: "URL copied!" });
+                } catch (err) {
+                  notification.error({ message: err.message });
                 }
               }}
-            />
+            />,
+            <Button
+              shape="circle"
+              style={{ border: 0 }}
+              icon={<HeartOutlined />}
+              onClick={async () => {
+                try {
+                  navigator.clipboard.writeText(
+                    `${item.verifiableCredential.id}`
+                  );
+                  notification.success({ message: "URL copied!" });
+                } catch (err) {
+                  notification.error({ message: err.message });
+                }
+              }}
+            />,
+            <Button
+              shape="circle"
+              style={{ border: 0 }}
+              icon={<ShareAltOutlined />}
+              onClick={async () => {
+                try {
+                  navigator.clipboard.writeText(
+                    `${item.verifiableCredential.id}`
+                  );
+                  notification.success({ message: "URL copied!" });
+                } catch (err) {
+                  notification.error({ message: err.message });
+                }
+              }}
+            />,
           ]}
         >
           <Card bordered={false} style={{ width: "100%" }}>
@@ -73,7 +110,7 @@ const Stream: React.FC<Props> = ({ setRefetch, refetch }) => {
                   onClick={() =>
                     history.push(
                       "/profile/" +
-                      item.verifiableCredential.credentialSubject.author?.id
+                        item.verifiableCredential.credentialSubject.author?.id
                     )
                   }
                 >
@@ -86,8 +123,12 @@ const Stream: React.FC<Props> = ({ setRefetch, refetch }) => {
             />
             <div
               className={"clickable-content"}
-              style={{ paddingTop: 15, fontSize: "1rem", marginLeft: 72 }}
-              onClick={() => history.push("/post/" + item?.verifiableCredential.id?.split('/').pop())}
+              style={{ paddingTop: 15, fontSize: "1.3rem", marginLeft: 72 }}
+              onClick={() =>
+                history.push(
+                  "/post/" + item?.verifiableCredential.id?.split("/").pop()
+                )
+              }
             >
               {item.verifiableCredential.credentialSubject?.articleBody}
             </div>

@@ -38,21 +38,38 @@ const NewPost: React.FC<Props> = (props: Props) => {
     () => agent?.didManagerFind()
   );
 
+  const [disabled, setDisabled] = useState<Boolean>(false);
+
   useEffect(() => {
     if (identifiers && selectedDid === undefined) {
-      setSelectedDid(identifiers[0].did);
+      if (identifiers.length > 1) {
+        setSelectedDid(identifiers[1].did);
+      } else {
+        setSelectedDid(identifiers[0].did);
+      }
     }
   }, [selectedDid, identifiers]);
 
+  useEffect(() => {
+    if (!selectedDid?.startsWith("did:nft:")) {
+      setDisabled(true);
+    } else {
+      setDisabled(false);
+    }
+  }, [selectedDid]);
+
   const createPost = async () => {
-    if(!process.env.REACT_APP_BASE_URL) throw Error('REACT_APP_BASE_URL is missing')
-    if(!process.env.REACT_APP_DEFAULT_RECIPIENT) throw Error('REACT_APP_DEFAULT_RECIPIENT is missing')
+    if (!process.env.REACT_APP_BASE_URL)
+      throw Error("REACT_APP_BASE_URL is missing");
+    if (!process.env.REACT_APP_DEFAULT_RECIPIENT)
+      throw Error("REACT_APP_DEFAULT_RECIPIENT is missing");
 
     setProgressStatus("active");
     setProgress(20);
     try {
       const profile = await agent?.getProfile({ did: selectedDid });
-      const credentialId = process.env.REACT_APP_BASE_URL + "/post/" + shortId();
+      const credentialId =
+        process.env.REACT_APP_BASE_URL + "/post/" + shortId();
 
       const verifiableCredential = await agent?.createVerifiableCredential({
         credential: {
@@ -92,7 +109,8 @@ const NewPost: React.FC<Props> = (props: Props) => {
         });
 
         notification.success({
-          message: "Message sent to: " + process.env.REACT_APP_DEFAULT_RECIPIENT,
+          message:
+            "Message sent to: " + process.env.REACT_APP_DEFAULT_RECIPIENT,
         });
       } catch (e) {
         notification.error({
@@ -140,7 +158,9 @@ const NewPost: React.FC<Props> = (props: Props) => {
             <Input.TextArea
               rows={1}
               style={{ border: 0, fontSize: 25, marginLeft: 80 }}
-              placeholder={"Hey, What's up?"}
+              placeholder={
+                !!disabled ? "Only NFTs can post here!" : "Hey, What's up?"
+              }
               onChange={(e) => setPostContent(e.target.value)}
               value={postContent}
             ></Input.TextArea>
@@ -155,7 +175,7 @@ const NewPost: React.FC<Props> = (props: Props) => {
           }}
         >
           <Button
-            disabled={!postContent}
+            disabled={!!disabled || !postContent}
             type="primary"
             size="large"
             shape="round"
