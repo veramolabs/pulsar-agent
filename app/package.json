@@ -30,7 +30,6 @@
     "@veramo/message-handler": "^1.1.1-next.15",
     "@veramo/remote-client": "^1.1.1-next.15",
     "@veramo/selective-disclosure": "^1.1.1-next.15",
-    "@web3-react/authereum-connector": "^6.1.9",
     "@web3-react/core": "^6.1.9",
     "@web3-react/frame-connector": "^6.0.9",
     "@web3-react/injected-connector": "^6.0.7",
@@ -49,8 +48,8 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "REACT_APP_BASE_URL=https://pulsar.veramo.dev REACT_APP_DEFAULT_RECIPIENT=did:web:pulsar.veramo.dev craco start",
-    "build": "REACT_APP_BASE_URL=https://pulsar.veramo.dev REACT_APP_DEFAULT_RECIPIENT=did:web:pulsar.veramo.dev craco build",
+    "start": "REACT_APP_BASE_URL=http://localhost:3332 REACT_APP_DEFAULT_RECIPIENT=did:web:localhost craco start",
+    "build": "REACT_APP_BASE_URL=http://localhost:3332 REACT_APP_DEFAULT_RECIPIENT=did:web:localhost craco build",
     "test": "craco test"
   },
   "eslintConfig": {

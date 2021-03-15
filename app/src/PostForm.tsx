@@ -63,6 +63,10 @@ const Module: React.FC<Props> = (props: Props) => {
             "https://www.w3id.org/veramolabs/socialmedia/context/v1",
           ],
           type: ["VerifiableCredential", "VerifiableSocialPosting"],
+          credentialSchema: {
+            id: "https://www.w3id.org/veramolabs/socialmedia/context/v1/eip712.json",
+            type: "Eip712SchemaValidator2021",
+          },
           id: credentialId,
           issuanceDate: new Date().toISOString(),
           credentialSubject: {
