@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
-import { Avatar, Card, Dropdown, List, Menu } from "antd";
+import { Avatar, Button, Card, List, Space, notification } from "antd";
 import { useQuery } from "react-query";
 import { useVeramo } from "@veramo-community/veramo-react";
 import { formatDistanceToNow } from "date-fns";
-import { MoreOutlined, EuroOutlined, CodeOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
-
+import { ShareAltOutlined } from '@ant-design/icons';
 interface Props {
   setRefetch?: (refetch: boolean) => void;
   refetch?: boolean;
@@ -38,11 +37,26 @@ const Stream: React.FC<Props> = ({ setRefetch, refetch }) => {
 
   return (
     <List
-      itemLayout="horizontal"
+      itemLayout="vertical"
+      size="large"
       dataSource={credentials}
       renderItem={(item) => (
         <List.Item
+          actions={[
+            <Button 
 
+              shape="circle"
+              icon={<ShareAltOutlined />} 
+              onClick={async () => {
+                try {
+                  navigator.clipboard.writeText(`${item.verifiableCredential.id}`)
+                  notification.success({ message: 'URL copied!' })
+                } catch(err) {
+                  notification.error({ message: err.message })
+                }
+              }}
+            />
+          ]}
         >
           <Card bordered={false} style={{ width: "100%" }}>
             <List.Item.Meta
@@ -59,7 +73,7 @@ const Stream: React.FC<Props> = ({ setRefetch, refetch }) => {
                   onClick={() =>
                     history.push(
                       "/profile/" +
-                        item.verifiableCredential.credentialSubject.author?.id
+                      item.verifiableCredential.credentialSubject.author?.id
                     )
                   }
                 >
