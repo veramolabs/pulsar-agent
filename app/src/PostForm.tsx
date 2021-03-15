@@ -46,11 +46,14 @@ const Module: React.FC<Props> = (props: Props) => {
   };
 
   const createPost = async (values: FormValues) => {
+    if(!process.env.REACT_APP_BASE_URL) throw Error('REACT_APP_BASE_URL is missing')
+    if(!process.env.REACT_APP_DEFAULT_RECIPIENT) throw Error('REACT_APP_DEFAULT_RECIPIENT is missing')
+
     setProgressStatus("active");
     setProgress(20);
     try {
       const profile = await agent?.getProfile({ did: values.from });
-      const credentialId = "https://pulsar.veramo.io/posts/" + shortId();
+      const credentialId = process.env.REACT_APP_BASE_URL + "/posts/" + shortId();
 
       const verifiableCredential = await agent?.createVerifiableCredential({
         credential: {
@@ -83,14 +86,14 @@ const Module: React.FC<Props> = (props: Props) => {
         await agent?.sendMessageDIDCommAlpha1({
           data: {
             from: values.from,
-            to: "did:web:pulsar.veramo.io",
+            to: process.env.REACT_APP_DEFAULT_RECIPIENT,
             body: verifiableCredential.proof.jwt,
             type: "jwt",
           },
         });
 
         notification.success({
-          message: "Message sent to: did:web:pulsar.veramo.io",
+          message: "Message sent to: " + process.env.REACT_APP_DEFAULT_RECIPIENT,
         });
       } catch (e) {
         notification.error({

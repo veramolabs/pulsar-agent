@@ -16,7 +16,7 @@ const Explore = () => {
       </Layout>
     );
   };
-
+  console.log(process.env)
   return (
     <Page
       header={

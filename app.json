@@ -10,9 +10,13 @@
     ],
     "addons": ["heroku-postgresql:hobby-dev"],
     "env": {
-      "AGENT_URL": {
+      "REACT_APP_BASE_URL": {
         "description": "The url for which your DID will be based on",
         "value": "https://appname.herokuapp.com"
+      },
+      "REACT_APP_DEFAULT_RECIPIENT": {
+        "description": "DID of the default recipient",
+        "value": "did:web:appname.herokuapp.com"
       },
       "API_NAME": {
         "description": "Open API name",

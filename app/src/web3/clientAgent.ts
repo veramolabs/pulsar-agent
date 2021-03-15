@@ -8,6 +8,8 @@ import { AgentRestClient } from '@veramo/remote-client'
 import { ProfileManager } from './ProfileManager'
 
 export function createClientAgent() {
+  if(!process.env.REACT_APP_BASE_URL) throw Error('REACT_APP_BASE_URL is missing')
+
   const id = 'clientAgent'
 
   const agent = createAgent<IDIDManager & IKeyManager & IResolver>({
@@ -18,7 +20,7 @@ export function createClientAgent() {
     plugins: [
       new ProfileManager(),
       new AgentRestClient({
-        url: 'https://pulsar.veramo.io/public-agent',
+        url: process.env.REACT_APP_BASE_URL + '/public-agent',
         enabledMethods: [
           'resolveDid',
           'dataStoreGetMessage',
