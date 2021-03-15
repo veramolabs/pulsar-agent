@@ -53,7 +53,7 @@ const Module: React.FC<Props> = (props: Props) => {
     setProgress(20);
     try {
       const profile = await agent?.getProfile({ did: values.from });
-      const credentialId = process.env.REACT_APP_BASE_URL + "/posts/" + shortId();
+      const credentialId = process.env.REACT_APP_BASE_URL + "/post/" + shortId();
 
       const verifiableCredential = await agent?.createVerifiableCredential({
         credential: {

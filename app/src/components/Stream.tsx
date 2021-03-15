@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
-import { Avatar, Card, Dropdown, List, Menu } from "antd";
+import { Avatar, Button, Card, List, Space, notification } from "antd";
 import { useQuery } from "react-query";
 import { useVeramo } from "@veramo-community/veramo-react";
 import { formatDistanceToNow } from "date-fns";
-import { MoreOutlined, EuroOutlined, CodeOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
-
+import { ShareAltOutlined } from '@ant-design/icons';
 interface Props {
   setRefetch?: (refetch: boolean) => void;
   refetch?: boolean;
@@ -38,37 +37,25 @@ const Stream: React.FC<Props> = ({ setRefetch, refetch }) => {
 
   return (
     <List
-      itemLayout="horizontal"
+      itemLayout="vertical"
+      size="large"
       dataSource={credentials}
       renderItem={(item) => (
         <List.Item
           actions={[
-            <Dropdown
-              overlay={
-                <Menu>
-                  <Menu.Item key="0" icon={<CodeOutlined />}>
-                    <a href="/">Show credential</a>
-                  </Menu.Item>
-                  {item.verifiableCredential.issuer.id.split(":")[1] ===
-                    "nft" && (
-                    <Menu.Item key="1" icon={<EuroOutlined />}>
-                      <a
-                        target="_blank"
-                        rel="noreferrer"
-                        href={`https://opensea.io/assets/${
-                          item.verifiableCredential.issuer.id.split(":")[3]
-                        }/${item.verifiableCredential.issuer.id.split(":")[4]}`}
-                      >
-                        Asset details
-                      </a>
-                    </Menu.Item>
-                  )}
-                </Menu>
-              }
-              trigger={["click"]}
-            >
-              <MoreOutlined />
-            </Dropdown>,
+            <Button 
+
+              shape="circle"
+              icon={<ShareAltOutlined />} 
+              onClick={async () => {
+                try {
+                  navigator.clipboard.writeText(`${item.verifiableCredential.id}`)
+                  notification.success({ message: 'URL copied!' })
+                } catch(err) {
+                  notification.error({ message: err.message })
+                }
+              }}
+            />
           ]}
         >
           <Card bordered={false} style={{ width: "100%" }}>
@@ -86,7 +73,7 @@ const Stream: React.FC<Props> = ({ setRefetch, refetch }) => {
                   onClick={() =>
                     history.push(
                       "/profile/" +
-                        item.verifiableCredential.credentialSubject.author?.id
+                      item.verifiableCredential.credentialSubject.author?.id
                     )
                   }
                 >
@@ -100,7 +87,7 @@ const Stream: React.FC<Props> = ({ setRefetch, refetch }) => {
             <div
               className={"clickable-content"}
               style={{ paddingTop: 15, fontSize: "1rem", marginLeft: 72 }}
-              onClick={() => history.push("/post/" + item?.hash)}
+              onClick={() => history.push("/post/" + item?.verifiableCredential.id?.split('/').pop())}
             >
               {item.verifiableCredential.credentialSubject?.articleBody}
             </div>
