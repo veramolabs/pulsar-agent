@@ -51,7 +51,7 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "REACT_APP_BASE_URL=http://b8da91a396e4.ngrok.io REACT_APP_DEFAULT_RECIPIENT=did:web:b8da91a396e4.ngrok.io craco start",
+    "start": "REACT_APP_BASE_URL=https://pulsar.veramo.dev craco start",
     "build": "craco build",
     "test": "craco test"
   },
