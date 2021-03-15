@@ -54,7 +54,10 @@ const Credential: React.FC<CredentialProps> = ({ vc }) => {
   };
 
   return (
-    <Card loading={false} style={{ borderRadius: 10 }}>
+    <Card
+      loading={!vc}
+      style={{ borderRadius: 10, backgroundColor: "#0a0a0a" }}
+    >
       <Card.Meta
         avatar={
           <Avatar src={vc?.credentialSubject.author?.image} size="large" />
