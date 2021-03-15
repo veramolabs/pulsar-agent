@@ -14,13 +14,17 @@
         "description": "The url for which your DID will be based on",
         "value": "https://appname.herokuapp.com"
       },
-      "AGENT_NAME": {
+      "API_NAME": {
         "description": "Open API name",
-        "value": "Agent"
+        "value": "Pulsar"
       },
       "API_KEY": {
         "description": "A secret key for verifying requests",
         "generator": "secret"
+      },
+      "PUBLIC_API_NAME": {
+        "description": "Open API name",
+        "value": "Pulsar Public"
       },
       "SECRET_KEY": {
         "description": "Secret key for database encryption",

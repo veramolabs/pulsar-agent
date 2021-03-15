@@ -9,8 +9,10 @@ constants:
     $env: SECRET_KEY
   apiKey:
     $env: API_KEY
-  agentName:
-    $env: AGENT_NAME
+  apiName:
+    $env: API_NAME
+  publicApiName:
+    $env: PUBLIC_API_NAME
   methods:
     - keyManagerGetKeyManagementSystems
     - keyManagerCreate
@@ -138,7 +140,8 @@ server:
         $args:
           - basePath: /agent
             securityScheme: bearer
-            apiName: Pulsar Admin
+            apiName:
+              $ref: /constants/apiName
             apiVersion: '1.0.0'
             exposedMethods:
               $ref: /constants/methods
@@ -168,7 +171,8 @@ server:
       - $require: '@veramo/remote-server?t=function#ApiSchemaRouter'
         $args:
           - basePath: /public-agent
-            apiName: Pulsar
+            apiName:
+              $ref: /constants/publicApiName
             apiVersion: '1.0.0'
             exposedMethods:
               $ref: /constants/publicMethods
