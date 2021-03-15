@@ -49,8 +49,8 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "REACT_APP_BASE_URL=https://pulsar.veramo.dev REACT_APP_DEFAULT_RECIPIENT=did:web:pulsar.veramo.dev craco start",
-    "build": "REACT_APP_BASE_URL=https://pulsar.veramo.dev REACT_APP_DEFAULT_RECIPIENT=did:web:pulsar.veramo.dev craco build",
+    "start": "REACT_APP_BASE_URL=https://e23152b060bc.ngrok.io REACT_APP_DEFAULT_RECIPIENT=did:web:e23152b060bc.ngrok.io craco start",
+    "build": "REACT_APP_BASE_URL=https://e23152b060bc.ngrok.io REACT_APP_DEFAULT_RECIPIENT=did:web:e23152b060bc.ngrok.io craco build",
     "test": "craco test"
   },
   "eslintConfig": {

@@ -24,10 +24,13 @@ const Post = () => {
   const agent = getAgent("clientAgent");
   const { postId } = useParams<{ postId: string }>();
   const history = useHistory();
+  if (!process.env.REACT_APP_BASE_URL) throw Error('REACT_APP_BASE_URL is missing')
 
   const { data: post, isLoading } = useQuery(
     ["post", { postId, agentId: agent?.context.name }],
-    () => agent?.dataStoreGetVerifiableCredential({ hash: postId })
+    () => agent?.dataStoreORMGetVerifiableCredentials({ where: [
+      {column: 'id', value: [`${process.env.REACT_APP_BASE_URL}/post/${postId}`]}
+    ], take: 1 }).then(r => r[0].verifiableCredential)
   );
   const rightContent = () => {
     return (

@@ -105,6 +105,7 @@ server:
       - $require: express?t=function#static
         $args:
           - ./app/build
+          - index: false
 
     # Add agent to the request object
     - - $require: '@veramo/remote-server?t=function#RequestWithAgentRouter'

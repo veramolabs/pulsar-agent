@@ -42,34 +42,7 @@ const Stream: React.FC<Props> = ({ setRefetch, refetch }) => {
       dataSource={credentials}
       renderItem={(item) => (
         <List.Item
-          actions={[
-            <Dropdown
-              overlay={
-                <Menu>
-                  <Menu.Item key="0" icon={<CodeOutlined />}>
-                    <a href="/">Show credential</a>
-                  </Menu.Item>
-                  {item.verifiableCredential.issuer.id.split(":")[1] ===
-                    "nft" && (
-                    <Menu.Item key="1" icon={<EuroOutlined />}>
-                      <a
-                        target="_blank"
-                        rel="noreferrer"
-                        href={`https://opensea.io/assets/${
-                          item.verifiableCredential.issuer.id.split(":")[3]
-                        }/${item.verifiableCredential.issuer.id.split(":")[4]}`}
-                      >
-                        Asset details
-                      </a>
-                    </Menu.Item>
-                  )}
-                </Menu>
-              }
-              trigger={["click"]}
-            >
-              <MoreOutlined />
-            </Dropdown>,
-          ]}
+
         >
           <Card bordered={false} style={{ width: "100%" }}>
             <List.Item.Meta
@@ -100,7 +73,7 @@ const Stream: React.FC<Props> = ({ setRefetch, refetch }) => {
             <div
               className={"clickable-content"}
               style={{ paddingTop: 15, fontSize: "1rem", marginLeft: 72 }}
-              onClick={() => history.push("/post/" + item?.hash)}
+              onClick={() => history.push("/post/" + item?.verifiableCredential.id?.split('/').pop())}
             >
               {item.verifiableCredential.credentialSubject?.articleBody}
             </div>
