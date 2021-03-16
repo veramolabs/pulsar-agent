@@ -14,11 +14,16 @@ import { IDataStoreORM } from "@veramo/data-store";
 interface Props {
   setRefetch?: (refetch: boolean) => void;
   refetch?: boolean;
-  agent: TAgent<IDataStoreORM>
+  agent: TAgent<IDataStoreORM>;
+  privateMode?: boolean;
 }
 
-const Stream: React.FC<Props> = ({ setRefetch, refetch, agent }) => {
-
+const Stream: React.FC<Props> = ({
+  setRefetch,
+  refetch,
+  agent,
+  privateMode,
+}) => {
   const history = useHistory();
   const { data: credentials, refetch: refetchQuery } = useQuery(
     ["credentials", { agentId: agent?.context.name }],
@@ -49,53 +54,57 @@ const Stream: React.FC<Props> = ({ setRefetch, refetch, agent }) => {
       renderItem={(item) => (
         <List.Item
           className="main-post"
-          actions={[
-            <Button
-              shape="circle"
-              style={{ border: 0 }}
-              icon={<CommentOutlined />}
-              onClick={async () => {
-                try {
-                  navigator.clipboard.writeText(
-                    `${item.verifiableCredential.id}`
-                  );
-                  notification.success({ message: "URL copied!" });
-                } catch (err) {
-                  notification.error({ message: err.message });
-                }
-              }}
-            />,
-            <Button
-              shape="circle"
-              style={{ border: 0 }}
-              icon={<HeartOutlined />}
-              onClick={async () => {
-                try {
-                  navigator.clipboard.writeText(
-                    `${item.verifiableCredential.id}`
-                  );
-                  notification.success({ message: "URL copied!" });
-                } catch (err) {
-                  notification.error({ message: err.message });
-                }
-              }}
-            />,
-            <Button
-              shape="circle"
-              style={{ border: 0 }}
-              icon={<ShareAltOutlined />}
-              onClick={async () => {
-                try {
-                  navigator.clipboard.writeText(
-                    `${item.verifiableCredential.id}`
-                  );
-                  notification.success({ message: "URL copied!" });
-                } catch (err) {
-                  notification.error({ message: err.message });
-                }
-              }}
-            />,
-          ]}
+          actions={
+            !privateMode
+              ? [
+                  <Button
+                    shape="circle"
+                    style={{ border: 0 }}
+                    icon={<CommentOutlined />}
+                    onClick={async () => {
+                      try {
+                        navigator.clipboard.writeText(
+                          `${item.verifiableCredential.id}`
+                        );
+                        notification.success({ message: "URL copied!" });
+                      } catch (err) {
+                        notification.error({ message: err.message });
+                      }
+                    }}
+                  />,
+                  <Button
+                    shape="circle"
+                    style={{ border: 0 }}
+                    icon={<HeartOutlined />}
+                    onClick={async () => {
+                      try {
+                        navigator.clipboard.writeText(
+                          `${item.verifiableCredential.id}`
+                        );
+                        notification.success({ message: "URL copied!" });
+                      } catch (err) {
+                        notification.error({ message: err.message });
+                      }
+                    }}
+                  />,
+                  <Button
+                    shape="circle"
+                    style={{ border: 0 }}
+                    icon={<ShareAltOutlined />}
+                    onClick={async () => {
+                      try {
+                        navigator.clipboard.writeText(
+                          `${item.verifiableCredential.id}`
+                        );
+                        notification.success({ message: "URL copied!" });
+                      } catch (err) {
+                        notification.error({ message: err.message });
+                      }
+                    }}
+                  />,
+                ]
+              : []
+          }
         >
           <Card bordered={false} style={{ width: "100%" }}>
             <List.Item.Meta

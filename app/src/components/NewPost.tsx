@@ -49,8 +49,10 @@ const NewPost: React.FC<Props> = (props: Props) => {
   );
 
   useEffect(() => {
-    if (identity && identity.services) {
-      const messaging = identity.services.find(
+    console.log(identity);
+
+    if (identity && identity.service) {
+      const messaging = identity.service.find(
         (i: any) => i.type === "Messaging"
       );
 
@@ -76,13 +78,13 @@ const NewPost: React.FC<Props> = (props: Props) => {
     }
   }, [selectedDid, identifiers]);
 
-  useEffect(() => {
-    if (!selectedDid?.startsWith("did:nft:")) {
-      setDisabled(true);
-    } else {
-      setDisabled(false);
-    }
-  }, [selectedDid]);
+  // useEffect(() => {
+  //   if (!selectedDid?.startsWith("did:nft:")) {
+  //     setDisabled(true);
+  //   } else {
+  //     setDisabled(false);
+  //   }
+  // }, [selectedDid]);
 
   const createPost = async () => {
     if (!process.env.REACT_APP_BASE_URL)
@@ -163,8 +165,6 @@ const NewPost: React.FC<Props> = (props: Props) => {
     }, 1000);
   };
 
-  console.log(!!disabled, !!postContent, dmsOpen);
-
   return (
     <div style={{ position: "relative" }}>
       <Card
@@ -197,7 +197,7 @@ const NewPost: React.FC<Props> = (props: Props) => {
                 }}
                 placeholder={
                   !!disabled
-                    ? "Only NFTs can post here!"
+                    ? "Oops, NFTs only allowed around here"
                     : props.recipientDid
                     ? dmsOpen
                       ? "Hey my DMs are open. What's up?"
