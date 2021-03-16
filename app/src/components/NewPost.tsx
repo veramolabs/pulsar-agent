@@ -49,8 +49,10 @@ const NewPost: React.FC<Props> = (props: Props) => {
   );
 
   useEffect(() => {
-    if (identity && identity.services) {
-      const messaging = identity.services.find(
+    console.log(identity);
+
+    if (identity && identity.service) {
+      const messaging = identity.service.find(
         (i: any) => i.type === "Messaging"
       );
 
