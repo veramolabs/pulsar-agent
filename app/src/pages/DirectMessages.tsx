@@ -29,8 +29,20 @@ const DirectMessages = () => {
     >
       <DMSetup />
       <CloudConnect />
-
-      {agent && <Stream agent={agent} privateMode />}
+      <Card
+        bordered={false}
+        title="Private Messages"
+        bodyStyle={{ padding: 0 }}
+      >
+        {agent && <Stream agent={agent} privateMode />}
+        {!agent && (
+          <Card bordered={false}>
+            <Typography.Text>
+              You do not have a personal messaging server set up yet.
+            </Typography.Text>
+          </Card>
+        )}
+      </Card>
     </Page>
   );
 };
