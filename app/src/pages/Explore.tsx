@@ -5,10 +5,14 @@ import Stream from "../components/Stream";
 import Connect from "../components/Connect";
 
 import article from "../static/img/article.jpeg";
+import { useVeramo } from "@veramo-community/veramo-react";
 
 const { Title } = Typography;
 
 const Explore = () => {
+  const { getAgent } = useVeramo();
+  const agent = getAgent("clientAgent");
+  
   const rightContent = () => {
     return (
       <Layout style={{ paddingLeft: 15, paddingTop: 15 }}>
@@ -16,7 +20,7 @@ const Explore = () => {
       </Layout>
     );
   };
-  console.log(process.env)
+
   return (
     <Page
       header={
@@ -42,7 +46,7 @@ const Explore = () => {
           </p>
         </div>
       </div>
-      <Stream />
+      <Stream agent={agent}/>
     </Page>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Avatar, Button, Card, List, Space, notification } from "antd";
 import { useQuery } from "react-query";
-import { useVeramo } from "@veramo-community/veramo-react";
+
 import { formatDistanceToNow } from "date-fns";
 import { useHistory } from "react-router-dom";
 import {
@@ -9,19 +9,21 @@ import {
   HeartOutlined,
   CommentOutlined,
 } from "@ant-design/icons";
+import { TAgent } from "@veramo/core";
+import { IDataStoreORM } from "@veramo/data-store";
 interface Props {
   setRefetch?: (refetch: boolean) => void;
   refetch?: boolean;
+  agent: TAgent<IDataStoreORM>
 }
 
-const Stream: React.FC<Props> = ({ setRefetch, refetch }) => {
-  const { getAgent } = useVeramo();
-  const agent = getAgent("clientAgent");
+const Stream: React.FC<Props> = ({ setRefetch, refetch, agent }) => {
+
   const history = useHistory();
   const { data: credentials, refetch: refetchQuery } = useQuery(
     ["credentials", { agentId: agent?.context.name }],
     () =>
-      agent?.dataStoreORMGetVerifiableCredentials({
+      agent.dataStoreORMGetVerifiableCredentials({
         where: [
           {
             column: "type",
