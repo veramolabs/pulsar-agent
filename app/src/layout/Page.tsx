@@ -12,7 +12,7 @@ const Page: React.FC<PageProps> = ({ children, header, rightContent }) => {
   return (
     <div>
       <Layout>
-        <Row>
+        <Row style={{ height: "100vh" }}>
           <Col xs={24} sm={24} md={24} lg={24} xl={rightContent ? 16 : 24}>
             <div
               style={{

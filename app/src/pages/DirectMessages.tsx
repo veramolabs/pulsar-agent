@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, Layout, Button } from "antd";
+import { Typography, Layout, Button, Row, Col, Card } from "antd";
 import Page from "../layout/Page";
 import Stream from "../components/Stream";
 import CloudConnect from "../components/CloudConnect";
@@ -9,9 +9,8 @@ import DMSetup from "../components/DMSetup";
 const { Title } = Typography;
 
 const DirectMessages = () => {
-
-  const { getAgent, removeAgent } = useVeramo()
-  let agent
+  const { getAgent, removeAgent } = useVeramo();
+  let agent;
   try {
     agent = getAgent("privateAgent");
   } catch (e) {}
@@ -19,15 +18,19 @@ const DirectMessages = () => {
   return (
     <Page
       header={
-        <Title level={4} style={{ fontWeight: "bold" }}>
-          Direct messages
-        </Title>
+        <Row>
+          <Col flex={1}>
+            <Title level={4} style={{ fontWeight: "bold" }}>
+              Direct messages
+            </Title>
+          </Col>
+        </Row>
       }
     >
       <DMSetup />
-      {!agent && <CloudConnect />}
-      {agent && <Button onClick={() => removeAgent('privateAgent')}>Disconnect</Button>}
-      {agent && <Stream agent={agent} />}
+      <CloudConnect />
+
+      {agent && <Stream agent={agent} privateMode />}
     </Page>
   );
 };

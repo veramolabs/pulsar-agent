@@ -76,7 +76,7 @@ const DMSetup = () => {
   return (
     <Card title="Enable direct messages" bordered={false}>
       <Typography.Text>
-        Update your DID dcouments service endpoint to ebanle direct messaging.
+        Update your DID dcouments service endpoint to enable direct messaging.
       </Typography.Text>
       <Row style={{ alignItems: "center", marginTop: 15 }}>
         <Col flex={1} style={{ marginRight: 20 }}>
