@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Input, notification, Progress, Card } from "antd";
+import { Button, Input, notification, Progress, Card, Tag } from "antd";
 import { useVeramo } from "@veramo-community/veramo-react";
 import { IDIDManager, IDataStore, TAgent, IMessageHandler } from "@veramo/core";
 import shortId from "shortid";
@@ -11,6 +11,7 @@ interface Props {
   id?: string;
   onFinish?: () => void;
   setRefetch: (refetch: boolean) => void;
+  recipientDid?: string;
 }
 
 const NewPost: React.FC<Props> = (props: Props) => {
@@ -32,11 +33,32 @@ const NewPost: React.FC<Props> = (props: Props) => {
     "active" | "exception" | undefined
   >(undefined);
   const [progress, setProgress] = useState<number | undefined>(undefined);
+  const [dmsOpen, setDmsOpen] = useState(false);
 
   const { data: identifiers, isLoading: isLoadingIdentifiers } = useQuery(
     ["managedIdentifiers"],
     () => agent?.didManagerFind()
   );
+
+  const { data: identity, isLoading: isLoadingIdentity } = useQuery(
+    ["identifier"],
+    () => agent?.resolveDid({ didUrl: props.recipientDid }),
+    {
+      enabled: !!props.recipientDid,
+    }
+  );
+
+  useEffect(() => {
+    if (identity && identity.services) {
+      const messaging = identity.services.find(
+        (i: any) => i.type === "Messaging"
+      );
+
+      if (messaging) {
+        setDmsOpen(true);
+      }
+    }
+  }, [identity]);
 
   const [disabled, setDisabled] = useState<Boolean>(false);
 
@@ -102,7 +124,7 @@ const NewPost: React.FC<Props> = (props: Props) => {
         await agent?.sendMessageDIDCommAlpha1({
           data: {
             from: selectedDid,
-            to: process.env.REACT_APP_DEFAULT_RECIPIENT,
+            to: props.recipientDid,
             body: verifiableCredential.proof.jwt,
             type: "jwt",
           },
@@ -155,15 +177,31 @@ const NewPost: React.FC<Props> = (props: Props) => {
             )
           }
           description={
-            <Input.TextArea
-              rows={1}
-              style={{ border: 0, fontSize: 25, marginLeft: 80 }}
-              placeholder={
-                !!disabled ? "Only NFTs can post here!" : "Hey, What's up?"
-              }
-              onChange={(e) => setPostContent(e.target.value)}
-              value={postContent}
-            ></Input.TextArea>
+            <div>
+              <Tag style={{ marginLeft: 90, marginTop: -10 }}>
+                {props.recipientDid ? "Private" : "Public"}
+              </Tag>
+              <Input.TextArea
+                rows={1}
+                style={{
+                  border: 0,
+                  fontSize: 25,
+                  marginLeft: 80,
+                  boxShadow: "none",
+                }}
+                placeholder={
+                  !!disabled
+                    ? "Only NFTs can post here!"
+                    : props.recipientDid
+                    ? dmsOpen
+                      ? "Hey my DMs are open. What's up?"
+                      : "DMs closed"
+                    : "Hey, What's up?"
+                }
+                onChange={(e) => setPostContent(e.target.value)}
+                value={postContent}
+              ></Input.TextArea>
+            </div>
           }
         />
         <div
@@ -175,14 +213,18 @@ const NewPost: React.FC<Props> = (props: Props) => {
           }}
         >
           <Button
-            disabled={!!disabled || !postContent}
+            disabled={!!disabled || !postContent || !dmsOpen}
             type="primary"
             size="large"
             shape="round"
-            style={{ width: 100 }}
+            style={{ width: 180 }}
             onClick={() => createPost()}
           >
-            <b>Say it</b>
+            {props.recipientDid ? (
+              <b>Private Message</b>
+            ) : (
+              <b>Public Message</b>
+            )}
           </Button>
         </div>
       </Card>

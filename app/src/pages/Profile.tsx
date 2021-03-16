@@ -7,6 +7,7 @@ import { useQuery } from "react-query";
 import { useVeramo } from "@veramo-community/veramo-react";
 import { useParams, useHistory } from "react-router-dom";
 import { ArrowLeftOutlined } from "@ant-design/icons";
+import NewPost from "../components/NewPost";
 
 const { Title } = Typography;
 
@@ -16,6 +17,7 @@ const Post = () => {
   const history = useHistory();
 
   const agent = getAgent("clientAgent");
+
   const { data, isLoading } = useQuery(
     ["profile" + did, { agentId: agent?.context.id }],
     () => agent?.getProfile({ did: did }),
@@ -60,9 +62,12 @@ const Post = () => {
         loading={isLoading}
         bodyStyle={{ padding: 0 }}
       >
-        <div style={{ height: 200, backgroundColor: "yellow" }}>
-          <img src="https://random.imagecdn.app/800/200" loading="eager" />
-        </div>
+        <div
+          style={{
+            height: 200,
+            backgroundColor: "#111111",
+          }}
+        ></div>
         <div style={{ padding: 20 }}>
           {data && (
             <div>
@@ -101,6 +106,7 @@ const Post = () => {
           )}
         </div>
       </Card>
+      <NewPost setRefetch={() => {}} recipientDid={did} />
     </Page>
   );
 };
