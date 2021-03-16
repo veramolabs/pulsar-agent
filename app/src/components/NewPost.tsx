@@ -132,7 +132,7 @@ const NewPost: React.FC<Props> = (props: Props) => {
         await agent?.sendMessageDIDCommAlpha1({
           data: {
             from: selectedDid,
-            to: props.recipientDid,
+            to: props.recipientDid || process.env.REACT_APP_DEFAULT_RECIPIENT,
             body: verifiableCredential.proof.jwt,
             type: "jwt",
           },
