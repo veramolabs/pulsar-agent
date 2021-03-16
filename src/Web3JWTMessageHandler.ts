@@ -74,7 +74,7 @@ export class Web3JwtMessageHandler extends AbstractMessageHandler {
           const signingAddress = verifyTypedData(getDomain(1), getEIP712Schema(), w3c_vc, decoded.signature.slice(4))
 
           // You need this for local development because of Opensea Rate limiting
-          await new Promise(r => setTimeout(r, 1000));
+          //await new Promise(r => setTimeout(r, 1000));
 
           // Check SigningAddress against issuer did:
           const didUrl = w3c_vc.issuer?.id?.toLowerCase()
