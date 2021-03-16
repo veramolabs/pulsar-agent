@@ -1,7 +1,7 @@
 version: 2.0
 
 constants:
-  baseUrl: http://localhost:3332
+  baseUrl: https://884badbacee3.ngrok.io
   port: 3332
   secretKey: 29739248cad1bd1a0fc4d9b75cd4d2990de535baf5caadfdf8d8f86664aa830c
   databaseFile: ./db/database.sqlite
@@ -164,7 +164,7 @@ server:
           - null
           - swaggerOptions:
               url: '/api'
-    
+
     # Frontend app
     - - '/'
       - $require: './build/spa-router?t=function#SpaRouter'
@@ -199,6 +199,8 @@ didResolver:
         $args:
           - ethr:
               $ref: /ethr-did-resolver
+            nft:
+              $ref: /nft-did-resolver
             web:
               $ref: /web-did-resolver
             io:
@@ -211,6 +213,24 @@ didResolver:
               $ref: /universal-resolver
             sov:
               $ref: /universal-resolver
+
+nft-did-resolver:
+  $require: './build/NFTResolver?t=function#NFTResolver'
+  $args:
+    - networks:
+        - name: mainnet
+          rpcUrl: https://mainnet.infura.io/v3/5ffc47f65c4042ce847ef66a3fa70d4c
+        - name: rinkeby
+          rpcUrl: https://rinkeby.infura.io/v3/5ffc47f65c4042ce847ef66a3fa70d4c
+        - name: ropsten
+          rpcUrl: https://ropsten.infura.io/v3/5ffc47f65c4042ce847ef66a3fa70d4c
+        - name: kovan
+          rpcUrl: https://kovan.infura.io/v3/5ffc47f65c4042ce847ef66a3fa70d4c
+        - name: goerli
+          rpcUrl: https://goerli.infura.io/v3/5ffc47f65c4042ce847ef66a3fa70d4c
+        - name: private
+          rpcUrl: http://localhost:8545/
+          registry: '0x05cc574b19a3c11308f761b3d7263bd8608bc532'
 
 ethr-did-resolver:
   $require: ethr-did-resolver?t=function&p=/ethr#getResolver

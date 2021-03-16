@@ -50,7 +50,7 @@ export async function createWeb3Agent({
             provider: web3Provider,
           }).ethr,
           web: webDidResolver().web,
-          nft: NFTResolver(web3Provider),
+          nft: NFTResolver({ provider: web3Provider }),
         }),
       }),
       new KeyManager({
