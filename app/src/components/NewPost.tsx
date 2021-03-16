@@ -56,7 +56,11 @@ const NewPost: React.FC<Props> = (props: Props) => {
 
       if (messaging) {
         setDmsOpen(true);
+      } else {
+        setDmsOpen(false);
       }
+    } else {
+      setDmsOpen(false);
     }
   }, [identity]);
 
@@ -159,6 +163,8 @@ const NewPost: React.FC<Props> = (props: Props) => {
     }, 1000);
   };
 
+  console.log(!!disabled, !!postContent, dmsOpen);
+
   return (
     <div style={{ position: "relative" }}>
       <Card
@@ -213,7 +219,9 @@ const NewPost: React.FC<Props> = (props: Props) => {
           }}
         >
           <Button
-            disabled={!!disabled || !postContent || !dmsOpen}
+            disabled={
+              !!disabled || !postContent || (props.recipientDid && !dmsOpen)
+            }
             type="primary"
             size="large"
             shape="round"
