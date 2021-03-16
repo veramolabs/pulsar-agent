@@ -8,6 +8,7 @@ import Explore from "../pages/Explore";
 import Home from "../pages/Home";
 import Post from "../pages/Post";
 import Profile from "../pages/Profile";
+import DirectMessages from "../pages/DirectMessages";
 
 const { Content } = Layout;
 
@@ -31,6 +32,7 @@ const Frame = () => {
               {/* {!web3Agent && <Redirect to="/" />} */}
               <Route path="/" exact component={Explore} />
               <Route path="/home" component={Home} />
+              <Route path="/messages" component={DirectMessages} />
               <Route path="/post/:postId" component={Post} />
               <Route path="/profile/:did" component={Profile} />
             </Col>

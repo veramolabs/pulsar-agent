@@ -1,7 +1,7 @@
 version: 2.0
 
 constants:
-  baseUrl: https://884badbacee3.ngrok.io
+  baseUrl: https://e23152b060bc.ngrok.io
   port: 3332
   secretKey: 29739248cad1bd1a0fc4d9b75cd4d2990de535baf5caadfdf8d8f86664aa830c
   databaseFile: ./db/database.sqlite
@@ -94,6 +94,7 @@ server:
       - $require: express?t=function#static
         $args:
           - ./app/build
+          - index: false
 
 
 

@@ -9,6 +9,7 @@ import { useQuery } from "react-query";
 import { useVeramo } from "@veramo-community/veramo-react";
 import { formatDistanceToNow } from "date-fns";
 import { useParams, useHistory } from "react-router-dom";
+import Credential from "../components/Credential";
 
 import {
   ArrowLeftOutlined,
@@ -24,10 +25,13 @@ const Post = () => {
   const agent = getAgent("clientAgent");
   const { postId } = useParams<{ postId: string }>();
   const history = useHistory();
+  if (!process.env.REACT_APP_BASE_URL) throw Error('REACT_APP_BASE_URL is missing')
 
   const { data: post, isLoading } = useQuery(
     ["post", { postId, agentId: agent?.context.name }],
-    () => agent?.dataStoreGetVerifiableCredential({ hash: postId })
+    () => agent?.dataStoreORMGetVerifiableCredentials({ where: [
+      {column: 'id', value: [`${process.env.REACT_APP_BASE_URL}/post/${postId}`]}
+    ], take: 1 }).then(r => r[0].verifiableCredential)
   );
   const rightContent = () => {
     return (
@@ -52,7 +56,16 @@ const Post = () => {
       }
       rightContent={rightContent()}
     >
-      <Card bordered={false} style={{ width: "100%" }} loading={isLoading}>
+      <Card
+        bordered={false}
+        style={{ width: "100%" }}
+        loading={isLoading}
+        actions={[
+          <SettingOutlined key="setting" />,
+          <EditOutlined key="edit" />,
+          <EllipsisOutlined key="ellipsis" />,
+        ]}
+      >
         {post && (
           <>
             <Card.Meta
@@ -73,23 +86,13 @@ const Post = () => {
                 Date.parse(post?.issuanceDate)
               )} ago`}
             />
-            <div style={{ paddingTop: 15, fontSize: "1rem", marginLeft: 72 }}>
-              {post?.credentialSubject?.articleBody}
-              <Card
-                style={{ width: "100%", marginTop: 40 }}
-                actions={[
-                  <SettingOutlined key="setting" />,
-                  <EditOutlined key="edit" />,
-                  <EllipsisOutlined key="ellipsis" />,
-                ]}
-              >
-                <Skeleton loading={false} avatar active>
-                  <h3>Verifiable Credential</h3>
-                  <pre>
-                    <code>{JSON.stringify(post, null, 2)}</code>
-                  </pre>
-                </Skeleton>
-              </Card>
+            <div style={{ paddingTop: 20, paddingBottom: 20, marginLeft: 72 }}>
+              <div style={{ fontSize: "1.3rem" }}>
+                {post?.credentialSubject?.articleBody}
+              </div>
+              <div style={{ paddingTop: 25 }}>
+                {post && <Credential vc={post} />}
+              </div>
             </div>
           </>
         )}

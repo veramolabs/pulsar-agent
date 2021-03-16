@@ -92,6 +92,7 @@ export async function createWeb3Agent({
   await agent.didManagerImport({
     did: `did:ethr:${account}`,
     provider: 'did:ethr',
+    alias: 'owner',
     controllerKeyId: didDoc.id + '#controller',
     keys: didDoc.publicKey.map(
       (pub) =>

@@ -20,7 +20,7 @@ const Profile = ({
   const { getAgent } = useVeramo<IProfileManager>();
   const agent = getAgent("clientAgent");
   const { data } = useQuery(
-    ["profile" + did, { agentId: agent?.context.id }],
+    ["profile" + did, { agentId: agent?.context.id, did }],
     () => agent?.getProfile({ did: did }),
     {
       enabled: !!did,
@@ -46,7 +46,7 @@ const Module: React.FC<Props> = ({ did, identifiers, setSelectedDid }) => {
   const { getAgent } = useVeramo<IProfileManager>();
   const agent = getAgent("clientAgent");
   const { data } = useQuery(
-    ["profile" + did, { agentId: agent?.context.id }],
+    ["profile" + did, { agentId: agent?.context.id, did }],
     () => agent?.getProfile({ did: did }),
     {
       enabled: !!did,
@@ -79,7 +79,9 @@ const Module: React.FC<Props> = ({ did, identifiers, setSelectedDid }) => {
         {identifiers.map((item) => {
           return (
             item.did !== did &&
-            selectionMode && <Profile key={item.did} did={item.did} onClick={setSelectedDid} />
+            selectionMode && (
+              <Profile key={item.did} did={item.did} onClick={setSelectedDid} />
+            )
           );
         })}
       </div>

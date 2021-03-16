@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Input, notification, Progress, Card } from "antd";
+import { Button, Input, notification, Progress, Card, Tag } from "antd";
 import { useVeramo } from "@veramo-community/veramo-react";
 import { IDIDManager, IDataStore, TAgent, IMessageHandler } from "@veramo/core";
 import shortId from "shortid";
@@ -11,6 +11,7 @@ interface Props {
   id?: string;
   onFinish?: () => void;
   setRefetch: (refetch: boolean) => void;
+  recipientDid?: string;
 }
 
 const NewPost: React.FC<Props> = (props: Props) => {
@@ -32,27 +33,69 @@ const NewPost: React.FC<Props> = (props: Props) => {
     "active" | "exception" | undefined
   >(undefined);
   const [progress, setProgress] = useState<number | undefined>(undefined);
+  const [dmsOpen, setDmsOpen] = useState(false);
 
   const { data: identifiers, isLoading: isLoadingIdentifiers } = useQuery(
     ["managedIdentifiers"],
     () => agent?.didManagerFind()
   );
 
+  const { data: identity, isLoading: isLoadingIdentity } = useQuery(
+    ["identifier"],
+    () => agent?.resolveDid({ didUrl: props.recipientDid }),
+    {
+      enabled: !!props.recipientDid,
+    }
+  );
+
+  useEffect(() => {
+    if (identity && identity.services) {
+      const messaging = identity.services.find(
+        (i: any) => i.type === "Messaging"
+      );
+
+      if (messaging) {
+        setDmsOpen(true);
+      } else {
+        setDmsOpen(false);
+      }
+    } else {
+      setDmsOpen(false);
+    }
+  }, [identity]);
+
+  const [disabled, setDisabled] = useState<Boolean>(false);
+
   useEffect(() => {
     if (identifiers && selectedDid === undefined) {
-      setSelectedDid(identifiers[0].did);
+      if (identifiers.length > 1) {
+        setSelectedDid(identifiers[1].did);
+      } else {
+        setSelectedDid(identifiers[0].did);
+      }
     }
   }, [selectedDid, identifiers]);
 
+  useEffect(() => {
+    if (!selectedDid?.startsWith("did:nft:")) {
+      setDisabled(true);
+    } else {
+      setDisabled(false);
+    }
+  }, [selectedDid]);
+
   const createPost = async () => {
-    if(!process.env.REACT_APP_BASE_URL) throw Error('REACT_APP_BASE_URL is missing')
-    if(!process.env.REACT_APP_DEFAULT_RECIPIENT) throw Error('REACT_APP_DEFAULT_RECIPIENT is missing')
+    if (!process.env.REACT_APP_BASE_URL)
+      throw Error("REACT_APP_BASE_URL is missing");
+    if (!process.env.REACT_APP_DEFAULT_RECIPIENT)
+      throw Error("REACT_APP_DEFAULT_RECIPIENT is missing");
 
     setProgressStatus("active");
     setProgress(20);
     try {
       const profile = await agent?.getProfile({ did: selectedDid });
-      const credentialId = process.env.REACT_APP_BASE_URL + "/posts/" + shortId();
+      const credentialId =
+        process.env.REACT_APP_BASE_URL + "/post/" + shortId();
 
       const verifiableCredential = await agent?.createVerifiableCredential({
         credential: {
@@ -89,14 +132,15 @@ const NewPost: React.FC<Props> = (props: Props) => {
         await agent?.sendMessageDIDCommAlpha1({
           data: {
             from: selectedDid,
-            to: process.env.REACT_APP_DEFAULT_RECIPIENT,
+            to: props.recipientDid,
             body: verifiableCredential.proof.jwt,
             type: "jwt",
           },
         });
 
         notification.success({
-          message: "Message sent to: " + process.env.REACT_APP_DEFAULT_RECIPIENT,
+          message:
+            "Message sent to: " + process.env.REACT_APP_DEFAULT_RECIPIENT,
         });
       } catch (e) {
         notification.error({
@@ -123,6 +167,8 @@ const NewPost: React.FC<Props> = (props: Props) => {
     }, 1000);
   };
 
+  console.log(!!disabled, !!postContent, dmsOpen);
+
   return (
     <div style={{ position: "relative" }}>
       <Card
@@ -141,13 +187,31 @@ const NewPost: React.FC<Props> = (props: Props) => {
             )
           }
           description={
-            <Input.TextArea
-              rows={1}
-              style={{ border: 0, fontSize: 25, marginLeft: 80 }}
-              placeholder={"Hey, What's up?"}
-              onChange={(e) => setPostContent(e.target.value)}
-              value={postContent}
-            ></Input.TextArea>
+            <div>
+              <Tag style={{ marginLeft: 90, marginTop: -10 }}>
+                {props.recipientDid ? "Private" : "Public"}
+              </Tag>
+              <Input.TextArea
+                rows={1}
+                style={{
+                  border: 0,
+                  fontSize: 25,
+                  marginLeft: 80,
+                  boxShadow: "none",
+                }}
+                placeholder={
+                  !!disabled
+                    ? "Only NFTs can post here!"
+                    : props.recipientDid
+                    ? dmsOpen
+                      ? "Hey my DMs are open. What's up?"
+                      : "DMs closed"
+                    : "Hey, What's up?"
+                }
+                onChange={(e) => setPostContent(e.target.value)}
+                value={postContent}
+              ></Input.TextArea>
+            </div>
           }
         />
         <div
@@ -159,14 +223,20 @@ const NewPost: React.FC<Props> = (props: Props) => {
           }}
         >
           <Button
-            disabled={!postContent}
+            disabled={
+              !!disabled || !postContent || (props.recipientDid && !dmsOpen)
+            }
             type="primary"
             size="large"
             shape="round"
-            style={{ width: 100 }}
+            style={{ width: 180 }}
             onClick={() => createPost()}
           >
-            <b>Say it</b>
+            {props.recipientDid ? (
+              <b>Private Message</b>
+            ) : (
+              <b>Public Message</b>
+            )}
           </Button>
         </div>
       </Card>
