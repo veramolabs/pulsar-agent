@@ -48,8 +48,8 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "REACT_APP_BASE_URL=http://localhost:3332 REACT_APP_DEFAULT_RECIPIENT=did:web:localhost craco start",
-    "build": "REACT_APP_BASE_URL=http://localhost:3332 REACT_APP_DEFAULT_RECIPIENT=did:web:localhost craco build",
+    "start": "REACT_APP_BASE_URL=https://pulsar.veramo.dev REACT_APP_DEFAULT_RECIPIENT=did:web:pulsar.veramo.dev craco start",
+    "build": "REACT_APP_BASE_URL=https://pulsar.veramo.dev REACT_APP_DEFAULT_RECIPIENT=did:web:pulsar.veramo.dev craco build",
     "test": "craco test"
   },
   "eslintConfig": {
