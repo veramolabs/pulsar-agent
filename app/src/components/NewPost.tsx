@@ -20,7 +20,7 @@ const NewPost: React.FC<Props> = (props: Props) => {
   >();
   let agent: TAgent<
     IDIDManager & IDataStore & IProfileManager & IMessageHandler
-  >;
+  > | undefined;
   try {
     agent = getAgent("web3Agent");
   } catch (e) {
@@ -36,12 +36,12 @@ const NewPost: React.FC<Props> = (props: Props) => {
   const [dmsOpen, setDmsOpen] = useState(false);
 
   const { data: identifiers, isLoading: isLoadingIdentifiers } = useQuery(
-    ["managedIdentifiers"],
+    ["managedIdentifiers", agent],
     () => agent?.didManagerFind()
   );
 
   const { data: identity, isLoading: isLoadingIdentity } = useQuery(
-    ["identifier"],
+    ["identifier", agent],
     () => agent?.resolveDid({ didUrl: props.recipientDid }),
     {
       enabled: !!props.recipientDid,
@@ -170,6 +170,10 @@ const NewPost: React.FC<Props> = (props: Props) => {
       }
     }, 1000);
   };
+
+  if (!agent) {
+    return (<></>)
+  }
 
   return (
     <div style={{ position: "relative" }}>
