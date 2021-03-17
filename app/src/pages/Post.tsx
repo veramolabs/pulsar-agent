@@ -1,21 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { Typography, Layout } from "antd";
 import Page from "../layout/Page";
 
 import Connect from "../components/Connect";
 
-import { Avatar, Card, Row } from "antd";
+import { Avatar, Card, Row, Button } from "antd";
 import { useQuery } from "react-query";
 import { useVeramo } from "@veramo-community/veramo-react";
 import { formatDistanceToNow } from "date-fns";
 import { useParams, useHistory } from "react-router-dom";
 import Credential from "../components/Credential";
+import QRCode from "qrcode.react";
 
 import {
   ArrowLeftOutlined,
-  SettingOutlined,
-  EditOutlined,
-  EllipsisOutlined,
+  QrcodeOutlined,
+  IdcardOutlined,
+  DownloadOutlined,
 } from "@ant-design/icons";
 
 const { Title } = Typography;
@@ -25,13 +26,27 @@ const Post = () => {
   const agent = getAgent("clientAgent");
   const { postId } = useParams<{ postId: string }>();
   const history = useHistory();
-  if (!process.env.REACT_APP_BASE_URL) throw Error('REACT_APP_BASE_URL is missing')
+
+  const [vcVisible, toggleVCVisible] = useState<boolean>(false);
+  const [qrCodeVisible, toggleQRVisible] = useState<boolean>(false);
+
+  if (!process.env.REACT_APP_BASE_URL)
+    throw Error("REACT_APP_BASE_URL is missing");
 
   const { data: post, isLoading } = useQuery(
     ["post", { postId, agentId: agent?.context.name }],
-    () => agent?.dataStoreORMGetVerifiableCredentials({ where: [
-      {column: 'id', value: [`${process.env.REACT_APP_BASE_URL}/post/${postId}`]}
-    ], take: 1 }).then(r => r[0].verifiableCredential)
+    () =>
+      agent
+        ?.dataStoreORMGetVerifiableCredentials({
+          where: [
+            {
+              column: "id",
+              value: [`${process.env.REACT_APP_BASE_URL}/post/${postId}`],
+            },
+          ],
+          take: 1,
+        })
+        .then((r) => r[0].verifiableCredential)
   );
   const rightContent = () => {
     return (
@@ -61,9 +76,31 @@ const Post = () => {
         style={{ width: "100%" }}
         loading={isLoading}
         actions={[
-          <SettingOutlined key="setting" />,
-          <EditOutlined key="edit" />,
-          <EllipsisOutlined key="ellipsis" />,
+          <QrcodeOutlined
+            key="qr"
+            style={{ fontSize: 25 }}
+            onClick={() => {
+              toggleVCVisible((s) => !s);
+              toggleQRVisible(false);
+            }}
+          />,
+          <IdcardOutlined
+            key="vc"
+            style={{ fontSize: 25 }}
+            onClick={() => {
+              toggleQRVisible((s) => !s);
+              toggleVCVisible(false);
+            }}
+          />,
+          <Button
+            type="link"
+            icon={<DownloadOutlined key="dl" style={{ fontSize: 25 }} />}
+            key="dl"
+            href={`data:text/json;charset=utf-8,${encodeURIComponent(
+              JSON.stringify(post)
+            )}`}
+            download={"post.vc"}
+          ></Button>,
         ]}
       >
         {post && (
@@ -90,9 +127,16 @@ const Post = () => {
               <div style={{ fontSize: "1.3rem" }}>
                 {post?.credentialSubject?.articleBody}
               </div>
-              <div style={{ paddingTop: 25 }}>
-                {post && <Credential vc={post} />}
-              </div>
+              {qrCodeVisible && (
+                <div style={{ paddingTop: 25 }}>
+                  {post && <Credential vc={post} />}
+                </div>
+              )}
+              {vcVisible && (
+                <div style={{ paddingTop: 25 }}>
+                  {post && <QRCode value={post.id || ""} size={500} />}
+                </div>
+              )}
             </div>
           </>
         )}

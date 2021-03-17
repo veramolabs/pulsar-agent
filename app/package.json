@@ -18,6 +18,7 @@
     "@types/shortid": "^0.0.29",
     "@types/sugar": "^2.0.2",
     "@types/url-parse": "^1.4.3",
+    "@types/qrcode.react": "^1.0.1",
     "@veramo-community/veramo-react": "^0.3.4",
     "@veramo/core": "^1.1.1-next.15",
     "@veramo/credential-w3c": "^1.1.1-next.15",
@@ -47,7 +48,8 @@
     "sugar": "^2.0.6",
     "typescript": "^4.1.2",
     "url-parse": "^1.5.1",
-    "web-vitals": "^1.0.1"
+    "web-vitals": "^1.0.1",
+    "qrcode.react": "^1.0.1"
   },
   "scripts": {
     "start": "REACT_APP_BASE_URL=https://pulsar.veramo.dev REACT_APP_DEFAULT_RECIPIENT=did:web:pulsar.veramo.dev craco start",
