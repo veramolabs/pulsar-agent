@@ -31,7 +31,7 @@ const Credential: React.FC<CredentialProps> = ({ vc }) => {
   const renderFields = (field: any) => {
     switch (typeof field) {
       case "string":
-        console.log("STRING!", field);
+        // console.log("STRING!", field);
         return (
           <Typography.Text
             style={{
@@ -44,7 +44,7 @@ const Credential: React.FC<CredentialProps> = ({ vc }) => {
           </Typography.Text>
         );
       case "object":
-        console.log("OBJECT!", field);
+        // console.log("OBJECT!", field);
         return (
           <Col style={{ paddingLeft: 10, borderLeft: "5px solid #222" }}>
             {renderKeys(field)}

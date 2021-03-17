@@ -24,7 +24,7 @@ const NewPost: React.FC<Props> = (props: Props) => {
   try {
     agent = getAgent("web3Agent");
   } catch (e) {
-    console.log(e.message);
+    // console.log(e.message);
   }
 
   const [selectedDid, setSelectedDid] = useState<string>();
@@ -49,7 +49,7 @@ const NewPost: React.FC<Props> = (props: Props) => {
   );
 
   useEffect(() => {
-    console.log(identity);
+    // console.log(identity);
 
     if (identity && identity.service) {
       const messaging = identity.service.find(
