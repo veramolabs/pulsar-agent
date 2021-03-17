@@ -52,7 +52,7 @@ export default function Connect() {
   const currentConnector = connectorsByName["Metamask"];
   const activating = currentConnector === activatingConnector;
   const connected = currentConnector === connector;
-  const disabled = !!activatingConnector || connected || !!error;
+  // const disabled = !!activatingConnector || connected || !!error;
 
   React.useEffect(() => {
     if (activatingConnector && activatingConnector === connector) {

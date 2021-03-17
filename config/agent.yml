@@ -2,15 +2,17 @@ version: 2.0
 
 constants:
   baseUrl: 
-    $env: AGENT_URL
+    $env: REACT_APP_BASE_URL
   port: 
     $env: PORT
   secretKey: 
     $env: SECRET_KEY
   apiKey:
     $env: API_KEY
-  agentName:
-    $env: AGENT_NAME
+  apiName:
+    $env: API_NAME
+  publicApiName:
+    $env: PUBLIC_API_NAME
   methods:
     - keyManagerGetKeyManagementSystems
     - keyManagerCreate
@@ -103,6 +105,7 @@ server:
       - $require: express?t=function#static
         $args:
           - ./app/build
+          - index: false
 
     # Add agent to the request object
     - - $require: '@veramo/remote-server?t=function#RequestWithAgentRouter'
@@ -138,7 +141,8 @@ server:
         $args:
           - basePath: /agent
             securityScheme: bearer
-            apiName: Pulsar Admin
+            apiName:
+              $ref: /constants/apiName
             apiVersion: '1.0.0'
             exposedMethods:
               $ref: /constants/methods
@@ -168,7 +172,8 @@ server:
       - $require: '@veramo/remote-server?t=function#ApiSchemaRouter'
         $args:
           - basePath: /public-agent
-            apiName: Pulsar
+            apiName:
+              $ref: /constants/publicApiName
             apiVersion: '1.0.0'
             exposedMethods:
               $ref: /constants/publicMethods
@@ -207,6 +212,8 @@ didResolver:
         $args:
           - ethr:
               $ref: /ethr-did-resolver
+            nft:
+              $ref: /nft-did-resolver
             web:
               $ref: /web-did-resolver
             io:
@@ -219,6 +226,24 @@ didResolver:
               $ref: /universal-resolver
             sov:
               $ref: /universal-resolver
+
+nft-did-resolver:
+  $require: './build/NFTResolver?t=function#NFTResolver'
+  $args:
+    - networks:
+        - name: mainnet
+          rpcUrl: https://mainnet.infura.io/v3/5ffc47f65c4042ce847ef66a3fa70d4c
+        - name: rinkeby
+          rpcUrl: https://rinkeby.infura.io/v3/5ffc47f65c4042ce847ef66a3fa70d4c
+        - name: ropsten
+          rpcUrl: https://ropsten.infura.io/v3/5ffc47f65c4042ce847ef66a3fa70d4c
+        - name: kovan
+          rpcUrl: https://kovan.infura.io/v3/5ffc47f65c4042ce847ef66a3fa70d4c
+        - name: goerli
+          rpcUrl: https://goerli.infura.io/v3/5ffc47f65c4042ce847ef66a3fa70d4c
+        - name: private
+          rpcUrl: http://localhost:8545/
+          registry: '0x05cc574b19a3c11308f761b3d7263bd8608bc532'
 
 ethr-did-resolver:
   $require: ethr-did-resolver?t=function&p=/ethr#getResolver

@@ -1,6 +1,6 @@
 import React from "react";
 import { Menu } from "antd";
-import { HomeOutlined, SearchOutlined } from "@ant-design/icons";
+import { HomeOutlined, SearchOutlined, MessageOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
 const mainMenu = [
@@ -15,6 +15,12 @@ const mainMenu = [
     label: "Explore",
     icon: SearchOutlined,
     private: false,
+  },
+  {
+    url: "/messages",
+    label: "Messages",
+    icon: MessageOutlined,
+    private: true,
   },
 ];
 

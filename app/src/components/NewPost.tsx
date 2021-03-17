@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Input, notification, Progress, Card } from "antd";
+import { Button, Input, notification, Progress, Card, Tag } from "antd";
 import { useVeramo } from "@veramo-community/veramo-react";
 import { IDIDManager, IDataStore, TAgent, IMessageHandler } from "@veramo/core";
 import shortId from "shortid";
@@ -11,6 +11,7 @@ interface Props {
   id?: string;
   onFinish?: () => void;
   setRefetch: (refetch: boolean) => void;
+  recipientDid?: string;
 }
 
 const NewPost: React.FC<Props> = (props: Props) => {
@@ -19,11 +20,11 @@ const NewPost: React.FC<Props> = (props: Props) => {
   >();
   let agent: TAgent<
     IDIDManager & IDataStore & IProfileManager & IMessageHandler
-  >;
+  > | undefined;
   try {
     agent = getAgent("web3Agent");
   } catch (e) {
-    console.log(e.message);
+    // console.log(e.message);
   }
 
   const [selectedDid, setSelectedDid] = useState<string>();
@@ -32,24 +33,71 @@ const NewPost: React.FC<Props> = (props: Props) => {
     "active" | "exception" | undefined
   >(undefined);
   const [progress, setProgress] = useState<number | undefined>(undefined);
+  const [dmsOpen, setDmsOpen] = useState(false);
 
   const { data: identifiers, isLoading: isLoadingIdentifiers } = useQuery(
-    ["managedIdentifiers"],
+    ["managedIdentifiers", agent],
     () => agent?.didManagerFind()
   );
 
+  const { data: identity, isLoading: isLoadingIdentity } = useQuery(
+    ["identifier", agent],
+    () => agent?.resolveDid({ didUrl: props.recipientDid }),
+    {
+      enabled: !!props.recipientDid,
+    }
+  );
+
+  useEffect(() => {
+    // console.log(identity);
+
+    if (identity && identity.service) {
+      const messaging = identity.service.find(
+        (i: any) => i.type === "Messaging"
+      );
+
+      if (messaging) {
+        setDmsOpen(true);
+      } else {
+        setDmsOpen(false);
+      }
+    } else {
+      setDmsOpen(false);
+    }
+  }, [identity]);
+
+  const [disabled] = useState<Boolean>(false);
+
   useEffect(() => {
     if (identifiers && selectedDid === undefined) {
-      setSelectedDid(identifiers[0].did);
+      if (identifiers.length > 1) {
+        setSelectedDid(identifiers[1].did);
+      } else {
+        setSelectedDid(identifiers[0].did);
+      }
     }
   }, [selectedDid, identifiers]);
 
+  // useEffect(() => {
+  //   if (!selectedDid?.startsWith("did:nft:")) {
+  //     setDisabled(true);
+  //   } else {
+  //     setDisabled(false);
+  //   }
+  // }, [selectedDid]);
+
   const createPost = async () => {
+    if (!process.env.REACT_APP_BASE_URL)
+      throw Error("REACT_APP_BASE_URL is missing");
+    if (!process.env.REACT_APP_DEFAULT_RECIPIENT)
+      throw Error("REACT_APP_DEFAULT_RECIPIENT is missing");
+
     setProgressStatus("active");
     setProgress(20);
     try {
       const profile = await agent?.getProfile({ did: selectedDid });
-      const credentialId = "https://pulsar.veramo.io/posts/" + shortId();
+      const credentialId =
+        process.env.REACT_APP_BASE_URL + "/post/" + shortId();
 
       const verifiableCredential = await agent?.createVerifiableCredential({
         credential: {
@@ -59,6 +107,10 @@ const NewPost: React.FC<Props> = (props: Props) => {
             "https://www.w3id.org/veramolabs/socialmedia/context/v1",
           ],
           type: ["VerifiableCredential", "VerifiableSocialPosting"],
+          credentialSchema: {
+            id: "https://www.w3id.org/veramolabs/socialmedia/context/v1/eip712.json",
+            type: "Eip712SchemaValidator2021",
+          },
           id: credentialId,
           issuanceDate: new Date().toISOString(),
           credentialSubject: {
@@ -79,17 +131,20 @@ const NewPost: React.FC<Props> = (props: Props) => {
       setProgress(80);
 
       try {
+        const to = props.recipientDid || process.env.REACT_APP_DEFAULT_RECIPIENT
+
         await agent?.sendMessageDIDCommAlpha1({
           data: {
             from: selectedDid,
-            to: "did:web:pulsar.veramo.io",
+            to,
             body: verifiableCredential.proof.jwt,
             type: "jwt",
           },
         });
 
         notification.success({
-          message: "Message sent to: did:web:pulsar.veramo.io",
+          message:
+            "Message sent to: " + to,
         });
       } catch (e) {
         notification.error({
@@ -116,10 +171,14 @@ const NewPost: React.FC<Props> = (props: Props) => {
     }, 1000);
   };
 
+  if (!agent) {
+    return (<></>)
+  }
+
   return (
     <div style={{ position: "relative" }}>
       <Card
-        loading={isLoadingIdentifiers || !selectedDid}
+        loading={isLoadingIdentity || isLoadingIdentifiers || !selectedDid}
         bordered={false}
         style={{ borderBottom: "1px solid #2b2b2b" }}
       >
@@ -134,13 +193,31 @@ const NewPost: React.FC<Props> = (props: Props) => {
             )
           }
           description={
-            <Input.TextArea
-              rows={1}
-              style={{ border: 0, fontSize: 25, marginLeft: 80 }}
-              placeholder={"Hey, What's up?"}
-              onChange={(e) => setPostContent(e.target.value)}
-              value={postContent}
-            ></Input.TextArea>
+            <div>
+              <Tag style={{ marginLeft: 90, marginTop: -10 }}>
+                {props.recipientDid ? "Private" : "Public"}
+              </Tag>
+              <Input.TextArea
+                rows={1}
+                style={{
+                  border: 0,
+                  fontSize: 25,
+                  marginLeft: 80,
+                  boxShadow: "none",
+                }}
+                placeholder={
+                  !!disabled
+                    ? "Oops, NFTs only allowed around here"
+                    : props.recipientDid
+                    ? dmsOpen
+                      ? "Hey my DMs are open. What's up?"
+                      : "DMs closed"
+                    : "Hey, What's up?"
+                }
+                onChange={(e) => setPostContent(e.target.value)}
+                value={postContent}
+              ></Input.TextArea>
+            </div>
           }
         />
         <div
@@ -152,14 +229,20 @@ const NewPost: React.FC<Props> = (props: Props) => {
           }}
         >
           <Button
-            disabled={!postContent}
+            disabled={
+              !!disabled || !postContent || (props.recipientDid && !dmsOpen)
+            }
             type="primary"
             size="large"
             shape="round"
-            style={{ width: 100 }}
+            style={{ width: 180 }}
             onClick={() => createPost()}
           >
-            <b>Say it</b>
+            {props.recipientDid ? (
+              <b>Private Message</b>
+            ) : (
+              <b>Public Message</b>
+            )}
           </Button>
         </div>
       </Card>

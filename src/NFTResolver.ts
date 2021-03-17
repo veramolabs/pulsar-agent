@@ -1,3 +1,4 @@
+// FYI: DUPLICATED FROM FRONTEND
 import { parse } from 'did-resolver'
 import { getResolver } from 'ethr-did-resolver'
 

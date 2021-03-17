@@ -50,7 +50,7 @@ export async function createWeb3Agent({
             provider: web3Provider,
           }).ethr,
           web: webDidResolver().web,
-          nft: NFTResolver(web3Provider),
+          nft: NFTResolver({ provider: web3Provider }),
         }),
       }),
       new KeyManager({
@@ -92,6 +92,7 @@ export async function createWeb3Agent({
   await agent.didManagerImport({
     did: `did:ethr:${account}`,
     provider: 'did:ethr',
+    alias: 'owner',
     controllerKeyId: didDoc.id + '#controller',
     keys: didDoc.publicKey.map(
       (pub) =>

@@ -6,7 +6,7 @@
 
 These are the default environment variables use in the production config.
 
-#### `AGENT_URL`
+#### `REACT_APP_BASE_URL`
 
 Set this to your base app url. Your default web:did will be based on this when it gets created on first run.
 

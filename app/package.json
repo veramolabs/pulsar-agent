@@ -16,6 +16,7 @@
     "@types/react-dom": "^17.0.0",
     "@types/react-router-dom": "^5.1.7",
     "@types/shortid": "^0.0.29",
+    "@types/sugar": "^2.0.2",
     "@types/url-parse": "^1.4.3",
     "@veramo-community/veramo-react": "^0.3.4",
     "@veramo/core": "^1.1.1-next.15",
@@ -30,20 +31,10 @@
     "@veramo/message-handler": "^1.1.1-next.15",
     "@veramo/remote-client": "^1.1.1-next.15",
     "@veramo/selective-disclosure": "^1.1.1-next.15",
-    "@web3-react/authereum-connector": "^6.1.9",
     "@web3-react/core": "^6.1.9",
-    "@web3-react/fortmatic-connector": "^6.1.6",
     "@web3-react/frame-connector": "^6.0.9",
     "@web3-react/injected-connector": "^6.0.7",
-    "@web3-react/lattice-connector": "^6.1.9",
-    "@web3-react/ledger-connector": "^6.1.9",
-    "@web3-react/magic-connector": "^6.1.9",
-    "@web3-react/network-connector": "^6.1.9",
-    "@web3-react/portis-connector": "^6.1.9",
-    "@web3-react/torus-connector": "^6.1.9",
-    "@web3-react/trezor-connector": "^6.1.9",
     "@web3-react/walletconnect-connector": "^6.1.9",
-    "@web3-react/walletlink-connector": "^6.1.9",
     "antd": "^4.13.1",
     "craco-less": "^1.17.1",
     "md5": "^2.3.0",
@@ -53,12 +44,13 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "shortid": "^2.2.16",
+    "sugar": "^2.0.6",
     "typescript": "^4.1.2",
     "url-parse": "^1.5.1",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "craco start",
+    "start": "REACT_APP_BASE_URL=https://pulsar.veramo.dev REACT_APP_DEFAULT_RECIPIENT=did:web:pulsar.veramo.dev craco start",
     "build": "craco build",
     "test": "craco test"
   },
@@ -80,5 +72,4 @@
       "last 1 safari version"
     ]
   }
-
 }

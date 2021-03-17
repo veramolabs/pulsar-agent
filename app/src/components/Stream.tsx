@@ -1,24 +1,34 @@
 import React, { useEffect } from "react";
-import { Avatar, Card, Dropdown, List, Menu } from "antd";
+import { Avatar, Button, Card, List, notification } from "antd";
 import { useQuery } from "react-query";
-import { useVeramo } from "@veramo-community/veramo-react";
-import { formatDistanceToNow } from "date-fns";
-import { MoreOutlined, EuroOutlined, CodeOutlined } from "@ant-design/icons";
-import { useHistory } from "react-router-dom";
 
+import { formatDistanceToNow } from "date-fns";
+import { useHistory } from "react-router-dom";
+import {
+  ShareAltOutlined,
+  HeartOutlined,
+  CommentOutlined,
+} from "@ant-design/icons";
+import { TAgent } from "@veramo/core";
+import { IDataStoreORM } from "@veramo/data-store";
 interface Props {
   setRefetch?: (refetch: boolean) => void;
   refetch?: boolean;
+  agent: TAgent<IDataStoreORM>;
+  privateMode?: boolean;
 }
 
-const Stream: React.FC<Props> = ({ setRefetch, refetch }) => {
-  const { getAgent } = useVeramo();
-  const agent = getAgent("clientAgent");
+const Stream: React.FC<Props> = ({
+  setRefetch,
+  refetch,
+  agent,
+  privateMode,
+}) => {
   const history = useHistory();
   const { data: credentials, refetch: refetchQuery } = useQuery(
     ["credentials", { agentId: agent?.context.name }],
     () =>
-      agent?.dataStoreORMGetVerifiableCredentials({
+      agent.dataStoreORMGetVerifiableCredentials({
         where: [
           {
             column: "type",
@@ -34,42 +44,67 @@ const Stream: React.FC<Props> = ({ setRefetch, refetch }) => {
       refetchQuery();
       setRefetch && setRefetch(false);
     }
-  }, [refetch]);
+  }, [refetch, refetchQuery, setRefetch]);
 
   return (
     <List
-      itemLayout="horizontal"
+      itemLayout="vertical"
+      size="large"
       dataSource={credentials}
       renderItem={(item) => (
         <List.Item
-          actions={[
-            <Dropdown
-              overlay={
-                <Menu>
-                  <Menu.Item key="0" icon={<CodeOutlined />}>
-                    <a href="/">Show credential</a>
-                  </Menu.Item>
-                  {item.verifiableCredential.issuer.id.split(":")[1] ===
-                    "nft" && (
-                    <Menu.Item key="1" icon={<EuroOutlined />}>
-                      <a
-                        target="_blank"
-                        rel="noreferrer"
-                        href={`https://opensea.io/assets/${
-                          item.verifiableCredential.issuer.id.split(":")[3]
-                        }/${item.verifiableCredential.issuer.id.split(":")[4]}`}
-                      >
-                        Asset details
-                      </a>
-                    </Menu.Item>
-                  )}
-                </Menu>
-              }
-              trigger={["click"]}
-            >
-              <MoreOutlined />
-            </Dropdown>,
-          ]}
+          className="main-post"
+          actions={
+            !privateMode
+              ? [
+                  <Button
+                    shape="circle"
+                    style={{ border: 0 }}
+                    icon={<CommentOutlined />}
+                    onClick={async () => {
+                      try {
+                        navigator.clipboard.writeText(
+                          `${item.verifiableCredential.id}`
+                        );
+                        notification.success({ message: "URL copied!" });
+                      } catch (err) {
+                        notification.error({ message: err.message });
+                      }
+                    }}
+                  />,
+                  <Button
+                    shape="circle"
+                    style={{ border: 0 }}
+                    icon={<HeartOutlined />}
+                    onClick={async () => {
+                      try {
+                        navigator.clipboard.writeText(
+                          `${item.verifiableCredential.id}`
+                        );
+                        notification.success({ message: "URL copied!" });
+                      } catch (err) {
+                        notification.error({ message: err.message });
+                      }
+                    }}
+                  />,
+                  <Button
+                    shape="circle"
+                    style={{ border: 0 }}
+                    icon={<ShareAltOutlined />}
+                    onClick={async () => {
+                      try {
+                        navigator.clipboard.writeText(
+                          `${item.verifiableCredential.id}`
+                        );
+                        notification.success({ message: "URL copied!" });
+                      } catch (err) {
+                        notification.error({ message: err.message });
+                      }
+                    }}
+                  />,
+                ]
+              : []
+          }
         >
           <Card bordered={false} style={{ width: "100%" }}>
             <List.Item.Meta
@@ -82,7 +117,9 @@ const Stream: React.FC<Props> = ({ setRefetch, refetch }) => {
                 />
               }
               title={
-                <a
+                <Button
+                  type="text"
+                  style={{padding: 0, fontSize: 18}}
                   onClick={() =>
                     history.push(
                       "/profile/" +
@@ -91,7 +128,7 @@ const Stream: React.FC<Props> = ({ setRefetch, refetch }) => {
                   }
                 >
                   {item.verifiableCredential.credentialSubject.author?.name}
-                </a>
+                </Button>
               }
               description={`${formatDistanceToNow(
                 Date.parse(item.verifiableCredential.issuanceDate)
@@ -99,8 +136,12 @@ const Stream: React.FC<Props> = ({ setRefetch, refetch }) => {
             />
             <div
               className={"clickable-content"}
-              style={{ paddingTop: 15, fontSize: "1rem", marginLeft: 72 }}
-              onClick={() => history.push("/post/" + item?.hash)}
+              style={{ paddingTop: 15, fontSize: "1.3rem", marginLeft: 72 }}
+              onClick={() =>
+                history.push(
+                  "/post/" + item?.verifiableCredential.id?.split("/").pop()
+                )
+              }
             >
               {item.verifiableCredential.credentialSubject?.articleBody}
             </div>

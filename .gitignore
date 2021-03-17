@@ -3,3 +3,5 @@ node_modules
 database.sqlite
 db
 .DS_Store
+tsconfig.tsbuildinfo
+.env
