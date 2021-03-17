@@ -99,7 +99,7 @@ const Post = () => {
             href={`data:text/plain;charset=utf-8,${encodeURIComponent(
               JSON.stringify(post)
             )}`}
-            download={"post.json"}
+            download={"post.txt"}
           ></Button>,
         ]}
       >
