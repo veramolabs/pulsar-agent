@@ -26,9 +26,13 @@ const DirectMessages = () => {
           </Col>
         </Row>
       }
+      rightContent={
+        <>
+          <DMSetup />
+          <CloudConnect />
+        </>
+      }
     >
-      <DMSetup />
-      <CloudConnect />
       <Card
         bordered={false}
         title="Private Messages"

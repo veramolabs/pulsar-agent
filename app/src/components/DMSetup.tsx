@@ -24,7 +24,7 @@ const DMSetup = () => {
 
   try {
     agent = getAgent("web3Agent");
-  } catch (e) {}
+  } catch (e) { }
 
   useEffect(() => {
     if (agent) {
@@ -70,7 +70,7 @@ const DMSetup = () => {
   return (
     <Card title="Enable direct messages" bordered={false}>
       <Typography.Text>
-        Update your DID dcouments service endpoint to enable direct messaging.
+        Add a messaging endpoint to your DID document to enable direct messaging
       </Typography.Text>
       <Row style={{ alignItems: "center", marginTop: 15 }}>
         <Col flex={1} style={{ marginRight: 20 }}>
@@ -87,8 +87,10 @@ const DMSetup = () => {
         </Col>
         <Col>
           <Button
-            type="primary"
             size="large"
+            type="primary"
+            block
+            shape="round"
             disabled={!endpoint}
             onClick={addService}
           >
