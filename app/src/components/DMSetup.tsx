@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Typography,
-  Input,
-  Button,
-  notification,
-  Card,
-  Row,
-  Col,
-} from "antd";
+import { Typography, Input, Button, notification, Card, Row, Col } from "antd";
 import { useVeramo } from "@veramo-community/veramo-react";
 import { IDIDManager, IResolver, TAgent } from "@veramo/core";
 
@@ -70,7 +62,7 @@ const DMSetup = () => {
   return (
     <Card title="Enable direct messages" bordered={false}>
       <Typography.Text>
-        Update your DID dcouments service endpoint to enable direct messaging.
+        Add a messaging endpoint to your DID document to enable direct messaging
       </Typography.Text>
       <Row style={{ alignItems: "center", marginTop: 15 }}>
         <Col flex={1} style={{ marginRight: 20 }}>
@@ -82,13 +74,14 @@ const DMSetup = () => {
               padding: 10,
               fontSize: 16,
               borderRadius: 10,
+              marginBottom: 15,
             }}
           />
-        </Col>
-        <Col>
           <Button
-            type="primary"
             size="large"
+            type="primary"
+            block
+            shape="round"
             disabled={!endpoint}
             onClick={addService}
           >
