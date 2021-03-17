@@ -134,7 +134,24 @@ const Post = () => {
               )}
               {vcVisible && (
                 <div style={{ paddingTop: 25 }}>
-                  {post && <QRCode value={post.id || ""} size={500} />}
+                  {post && (
+                    <Card
+                      style={{
+                        borderRadius: 10,
+                        backgroundColor: "#0a0a0a",
+                        textAlign: "center",
+                      }}
+                    >
+                      <QRCode
+                        value={post.id || ""}
+                        size={400}
+                        style={{ margin: 50 }}
+                      />
+                      <Typography.Text>
+                        Scan QR code with your mobile device
+                      </Typography.Text>
+                    </Card>
+                  )}
                 </div>
               )}
             </div>
