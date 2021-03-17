@@ -131,10 +131,12 @@ const NewPost: React.FC<Props> = (props: Props) => {
       setProgress(80);
 
       try {
+        const to = props.recipientDid || process.env.REACT_APP_DEFAULT_RECIPIENT
+
         await agent?.sendMessageDIDCommAlpha1({
           data: {
             from: selectedDid,
-            to: props.recipientDid || process.env.REACT_APP_DEFAULT_RECIPIENT,
+            to,
             body: verifiableCredential.proof.jwt,
             type: "jwt",
           },
@@ -142,7 +144,7 @@ const NewPost: React.FC<Props> = (props: Props) => {
 
         notification.success({
           message:
-            "Message sent to: " + process.env.REACT_APP_DEFAULT_RECIPIENT,
+            "Message sent to: " + to,
         });
       } catch (e) {
         notification.error({
