@@ -96,10 +96,10 @@ const Post = () => {
             type="link"
             icon={<DownloadOutlined key="dl" style={{ fontSize: 25 }} />}
             key="dl"
-            href={`data:text/json;charset=utf-8,${encodeURIComponent(
-              JSON.stringify(post)
+            href={`data:text/plain;charset=utf-8,${encodeURIComponent(
+              JSON.stringify(post, null, 2)
             )}`}
-            download={"post.vc"}
+            download={"post.txt"}
           ></Button>,
         ]}
       >
