@@ -8,6 +8,7 @@ import { useVeramo } from "@veramo-community/veramo-react";
 import { useParams, useHistory } from "react-router-dom";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import NewPost from "../components/NewPost";
+import Stream from "../components/Stream";
 
 const { Title } = Typography;
 
@@ -107,6 +108,7 @@ const Post = () => {
         </div>
       </Card>
       <NewPost setRefetch={() => {}} recipientDid={did} />
+      <Stream setRefetch={() => {}} refetch={true} agent={agent} did={did} />
     </Page>
   );
 };
