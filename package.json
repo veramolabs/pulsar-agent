@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@types/express-handlebars": "^3.1.0",
+    "@ethersproject/wallet": "^5.0.12",
     "@veramo/cli": "^1.1.1-next.15",
     "express-handlebars": "^5.2.1",
     "typescript": "^4.2.3"

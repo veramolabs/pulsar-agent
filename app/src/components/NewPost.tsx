@@ -107,6 +107,10 @@ const NewPost: React.FC<Props> = (props: Props) => {
             "https://www.w3id.org/veramolabs/socialmedia/context/v1",
           ],
           type: ["VerifiableCredential", "VerifiableSocialPosting"],
+          credentialSchema: {
+            id: "https://www.w3id.org/veramolabs/socialmedia/context/v1/eip712.json",
+            type: "Eip712SchemaValidator2021",
+          },
           id: credentialId,
           issuanceDate: new Date().toISOString(),
           credentialSubject: {
@@ -130,7 +134,7 @@ const NewPost: React.FC<Props> = (props: Props) => {
         await agent?.sendMessageDIDCommAlpha1({
           data: {
             from: selectedDid,
-            to: props.recipientDid,
+            to: props.recipientDid || process.env.REACT_APP_DEFAULT_RECIPIENT,
             body: verifiableCredential.proof.jwt,
             type: "jwt",
           },
