@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Typography,
-  Input,
-  Button,
-  notification,
-  Card,
-  Row,
-  Col,
-} from "antd";
+import { Typography, Input, Button, notification, Card, Row, Col } from "antd";
 import { useVeramo } from "@veramo-community/veramo-react";
 import { IDIDManager, IResolver, TAgent } from "@veramo/core";
 
@@ -24,7 +16,7 @@ const DMSetup = () => {
 
   try {
     agent = getAgent("web3Agent");
-  } catch (e) { }
+  } catch (e) {}
 
   useEffect(() => {
     if (agent) {
@@ -82,10 +74,9 @@ const DMSetup = () => {
               padding: 10,
               fontSize: 16,
               borderRadius: 10,
+              marginBottom: 15,
             }}
           />
-        </Col>
-        <Col>
           <Button
             size="large"
             type="primary"
