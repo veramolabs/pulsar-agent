@@ -37,7 +37,7 @@ const Credential: React.FC<CredentialProps> = ({ vc }) => {
             style={{
               fontSize: 16,
               overflowWrap: "anywhere",
-              fontFamily: "Consolas",
+              fontFamily: "Consolas, Menlo, Arial, Sans-Serif",
             }}
           >
             {field || "NA"}
