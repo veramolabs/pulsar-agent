@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import {
-  Typography,
   Form,
   Input,
   Button,
-  List,
   notification,
   Card,
   Row,
@@ -77,35 +75,6 @@ const CloudConnect = () => {
     };
   }, [schema]);
 
-  const methods = () => {
-    return (
-      schema &&
-      schema["x-methods"] && (
-        <div
-          style={{
-            height: 300,
-            margin: "20px 0",
-            overflow: "scroll",
-            border: "1px solid #e8e8e8",
-            borderRadius: 4,
-            padding: "8px 24px",
-          }}
-        >
-          <List
-            header={
-              <Typography.Title level={5}>Available methods</Typography.Title>
-            }
-            dataSource={Object.keys(schema["x-methods"])}
-            renderItem={(item) => (
-              <List.Item>
-                <Typography.Text>{item}</Typography.Text>
-              </List.Item>
-            )}
-          />
-        </div>
-      )
-    );
-  };
 
   return (
     <Card
@@ -158,25 +127,8 @@ const CloudConnect = () => {
               onChange={(e) => setSchemaUrl(e.target.value)}
             />
           </Form.Item>
-          {methods()}
           {schema && (
             <>
-              <Form.Item label="Agent name">
-                <Input
-                  size="large"
-                  placeholder="Remote Agent"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </Form.Item>
-              <Form.Item label="Agent Url">
-                <Input
-                  size="large"
-                  placeholder="Agent Url"
-                  value={agentUrl}
-                  onChange={(e) => setAgentUrl(e.target.value)}
-                />
-              </Form.Item>
               <Form.Item label="API Key">
                 <Input
                   size="large"

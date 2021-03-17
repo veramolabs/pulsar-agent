@@ -66,7 +66,7 @@ const NewPost: React.FC<Props> = (props: Props) => {
     }
   }, [identity]);
 
-  const [disabled, setDisabled] = useState<Boolean>(false);
+  const [disabled] = useState<Boolean>(false);
 
   useEffect(() => {
     if (identifiers && selectedDid === undefined) {
@@ -174,7 +174,7 @@ const NewPost: React.FC<Props> = (props: Props) => {
   return (
     <div style={{ position: "relative" }}>
       <Card
-        loading={isLoadingIdentifiers || !selectedDid}
+        loading={isLoadingIdentity || isLoadingIdentifiers || !selectedDid}
         bordered={false}
         style={{ borderBottom: "1px solid #2b2b2b" }}
       >

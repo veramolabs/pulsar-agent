@@ -2,7 +2,7 @@ import React from "react";
 import { Avatar, Card, Typography, Row, Col } from "antd";
 import { formatDistanceToNow, format } from "date-fns";
 
-const Sugar = require("sugar");
+// const Sugar = require("sugar");
 
 interface CredentialProps {
   vc: any;

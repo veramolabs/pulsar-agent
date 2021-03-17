@@ -32,7 +32,7 @@ const Explore = () => {
     >
       <div style={{ borderBottom: "1px solid #2d2d2d" }}>
         <div style={{ height: 400, overflow: "hidden" }}>
-          <img src={article} width="100%" />
+          <img alt='' src={article} width="100%" />
         </div>
         <div style={{ padding: 15 }}>
           <Title level={2}>

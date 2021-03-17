@@ -20,7 +20,7 @@ const mainMenu = [
     url: "/messages",
     label: "Messages",
     icon: MessageOutlined,
-    private: false,
+    private: true,
   },
 ];
 

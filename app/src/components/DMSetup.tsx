@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import {
   Typography,
-  Form,
   Input,
   Button,
-  List,
   notification,
   Card,
   Row,
@@ -12,10 +10,6 @@ import {
 } from "antd";
 import { useVeramo } from "@veramo-community/veramo-react";
 import { IDIDManager, IResolver, TAgent } from "@veramo/core";
-
-interface FormValues {
-  endpoint: string;
-}
 
 const DMSetup = () => {
   const [endpoint, setEndpoint] = useState<string>();

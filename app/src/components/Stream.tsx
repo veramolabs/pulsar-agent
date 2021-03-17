@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Avatar, Button, Card, List, Space, notification } from "antd";
+import { Avatar, Button, Card, List, notification } from "antd";
 import { useQuery } from "react-query";
 
 import { formatDistanceToNow } from "date-fns";
@@ -44,7 +44,7 @@ const Stream: React.FC<Props> = ({
       refetchQuery();
       setRefetch && setRefetch(false);
     }
-  }, [refetch]);
+  }, [refetch, refetchQuery, setRefetch]);
 
   return (
     <List
@@ -117,7 +117,9 @@ const Stream: React.FC<Props> = ({
                 />
               }
               title={
-                <a
+                <Button
+                  type="text"
+                  style={{padding: 0, fontSize: 18}}
                   onClick={() =>
                     history.push(
                       "/profile/" +
@@ -126,7 +128,7 @@ const Stream: React.FC<Props> = ({
                   }
                 >
                   {item.verifiableCredential.credentialSubject.author?.name}
-                </a>
+                </Button>
               }
               description={`${formatDistanceToNow(
                 Date.parse(item.verifiableCredential.issuanceDate)

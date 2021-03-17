@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, Layout, Button, Row, Col, Card } from "antd";
+import { Typography, Row, Col, Card } from "antd";
 import Page from "../layout/Page";
 import Stream from "../components/Stream";
 import CloudConnect from "../components/CloudConnect";
@@ -9,7 +9,7 @@ import DMSetup from "../components/DMSetup";
 const { Title } = Typography;
 
 const DirectMessages = () => {
-  const { getAgent, removeAgent } = useVeramo();
+  const { getAgent} = useVeramo();
   let agent;
   try {
     agent = getAgent("privateAgent");
