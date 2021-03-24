@@ -1,59 +1,36 @@
-# Veramo Agent Deploy
+# Pulsar
 
-**The official Veramo Docker agent is built from this this source.**
+# Running locally
 
-## Environment variables
-
-These are the default environment variables use in the production config.
-
-#### `REACT_APP_BASE_URL`
-
-Set this to your base app url. Your default web:did will be based on this when it gets created on first run.
-
-#### `API_KEY`
-
-Used for authorization
-
-#### `SECRET_KEY`
-
-Used for encrypting the database
-
-#### `AGENT_ENDPOINT`
-
-The url where the agent will be accessible from
-
-#### `PORT`
-
-The port to run the server on
-
-#### `DATABASE_URL`
-
-The database connection string for Postgres
-
-## Deploy to Heroku
-
-You can deploy this directly to Heroku by clicking this button:
-
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
-
-## Deploy to Heroku using Docker
-
-You will need to fork this repo and add the following key/value pair to the root of `app.json`. You can then use the same deploy button as above or use the Heroku cli.
-
-```json
-{
-  "stack": "container"
-}
+```
+yarn
+yarn build
 ```
 
-## Deploy to Azure Pipelines
+Run in a separate terminal:
 
-Coming soon
+```
+ngrok http 3332
+```
 
-## Deploy to Azure Pipelines using docker
+Copy https URL (https://AAABBBCCC.ngrok.io)
 
-Coming soon
+In `package.json` file, replace `REACT_APP_BASE_URL=https://pulsar.veramo.dev` to `REACT_APP_BASE_URL=https://AAABBBCCC.ngrok.io`
 
-## Deploy to AWS
+Replace `baseUrl: https://e23152b060bc.ngrok.io` to `baseUrl: https://AAABBBCCC.ngrok.io` in `config/agent-local.yml`
 
-Coming soon
+
+Run:
+```
+yarn dev
+```
+
+
+In `app/package.json` file, replace `REACT_APP_BASE_URL=https://pulsar.veramo.dev` to `REACT_APP_BASE_URL=https://AAABBBCCC.ngrok.io`
+
+and `REACT_APP_DEFAULT_RECIPIENT=did:web:AAABBBCCC.ngrok.io` to `REACT_APP_DEFAULT_RECIPIENT=did:web:AAABBBCCC.ngrok.io`
+
+Run:
+```
+yarn start
+```
