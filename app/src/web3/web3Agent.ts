@@ -109,7 +109,7 @@ export async function createWeb3Agent({
   try {
     const { assets } = await (
       await fetch(
-        `https://api.opensea.io/api/v1/assets?owner=${account}&order_direction=desc&offset=0&limit=20`,
+        `${process.env.REACT_APP_BASE_URL}/opensea/assets?owner=${account}&order_direction=desc&offset=0&limit=20`,
       )
     ).json()
 

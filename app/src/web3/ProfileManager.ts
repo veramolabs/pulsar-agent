@@ -58,12 +58,12 @@ export class ProfileManager implements IAgentPlugin {
     if (args.did.substr(0, 7) === 'did:nft') {
       const split = args.did.split(':')
       let asset: any
-      const res = await fetch(`https://api.opensea.io/api/v1/asset/${split[3]}/${split[4]}/`)
+      const res = await fetch(`${process.env.REACT_APP_BASE_URL}/opensea/asset/${split[3]}/${split[4]}/`)
       if (res.status !== 429) {
         asset = await res.json()
       } else {
         await timeoutResolver(2000)
-        const res = await fetch(`https://api.opensea.io/api/v1/asset/${split[3]}/${split[4]}/`)
+        const res = await fetch(`${process.env.REACT_APP_BASE_URL}/opensea/asset/${split[3]}/${split[4]}/`)
         asset = await res.json()
 
         console.log('ASSET', asset)
@@ -71,7 +71,7 @@ export class ProfileManager implements IAgentPlugin {
       }
 
 
-  
+
       return {
         did: args.did,
         name: asset?.name,

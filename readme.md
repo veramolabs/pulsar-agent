@@ -18,6 +18,10 @@ Used for authorization
 
 Used for encrypting the database
 
+#### `OPENSEA_API_KEY`
+
+API_KEY for the opensea router (prevents rate-limiting)
+
 #### `AGENT_ENDPOINT`
 
 The url where the agent will be accessible from

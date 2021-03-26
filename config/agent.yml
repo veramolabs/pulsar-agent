@@ -1,12 +1,14 @@
 version: 2.0
 
 constants:
-  baseUrl: 
+  baseUrl:
     $env: REACT_APP_BASE_URL
-  port: 
+  port:
     $env: PORT
-  secretKey: 
+  secretKey:
     $env: SECRET_KEY
+  openSeaApiKey:
+    $env: OPENSEA_API_KEY
   apiKey:
     $env: API_KEY
   apiName:
@@ -128,7 +130,7 @@ server:
     - - /agent
       - $require: '@veramo/remote-server?t=function#apiKeyAuth'
         $args:
-          - apiKey: 
+          - apiKey:
               $ref: /constants/apiKey
       - $require: '@veramo/remote-server?t=function#AgentRouter'
         $args:
@@ -177,7 +179,15 @@ server:
             apiVersion: '1.0.0'
             exposedMethods:
               $ref: /constants/publicMethods
-    
+
+    # Opensea Router
+    - - '/opensea'
+      - $require: './build/opensea-router?t=function#OpenSeaRouter'
+        $args:
+          - openSeaApiKey:
+              $ref: /constants/openSeaApiKey
+            routePrefix: '/opensea'
+
     # Frontend app
     - - '/'
       - $require: './build/spa-router?t=function#SpaRouter'
