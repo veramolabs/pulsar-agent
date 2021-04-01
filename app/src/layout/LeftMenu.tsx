@@ -15,13 +15,14 @@ const mainMenu = [
     label: "Explore",
     icon: SearchOutlined,
     private: false,
-  },
-  {
-    url: "/messages",
-    label: "Messages",
-    icon: MessageOutlined,
-    private: true,
-  },
+  }
+  // ,
+  // {
+  //   url: "/messages",
+  //   label: "Messages",
+  //   icon: MessageOutlined,
+  //   private: true,
+  // },
 ];
 
 const SideMenu: React.FC<any> = ({ web3Agent }) => {
