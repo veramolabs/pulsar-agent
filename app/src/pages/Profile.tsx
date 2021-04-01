@@ -107,7 +107,7 @@ const Post = () => {
           )}
         </div>
       </Card>
-      <NewPost setRefetch={() => {}} recipientDid={did} />
+      {/* <NewPost setRefetch={() => {}} recipientDid={did} /> */}
       <Stream setRefetch={() => {}} refetch={true} agent={agent} did={did} />
     </Page>
   );
