@@ -3,7 +3,7 @@ import { Button, Input, notification, Progress, Card, Tag } from "antd";
 import { useVeramo } from "@veramo-community/veramo-react";
 import { IDIDManager, IDataStore, TAgent, IMessageHandler } from "@veramo/core";
 import shortId from "shortid";
-import { IProfileManager } from "../web3/ProfileManager";
+import { IProfileManager } from "../veramo-web3/ProfileManager";
 import { useQuery } from "react-query";
 import IdentifierSelect from "../components/IdentifierSelect";
 

@@ -2,7 +2,7 @@ import React from "react";
 import "../App.less";
 import { BrowserRouter, Route } from "react-router-dom";
 import { Web3Provider } from "@ethersproject/providers";
-import { VeramoWeb3Provider } from "../web3/VeramoWeb3Provider";
+import { VeramoWeb3Provider } from "../components/providers/VeramoWeb3Provider";
 import { QueryClientProvider, QueryClient } from "react-query";
 import { Web3ReactProvider } from "@web3-react/core";
 import Frame from "./Frame";
