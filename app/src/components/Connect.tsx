@@ -8,7 +8,7 @@ import { UserRejectedRequestError as UserRejectedRequestErrorWalletConnect } fro
 import { UserRejectedRequestError as UserRejectedRequestErrorFrame } from "@web3-react/frame-connector";
 import { Web3Provider } from "@ethersproject/providers";
 
-import { injected, walletconnect } from "../web3/connectors";
+import { injected, walletconnect } from "../wallets/connectors";
 import { Typography, Card, Button } from "antd";
 import { useHistory } from "react-router-dom";
 

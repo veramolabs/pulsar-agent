@@ -1,10 +1,11 @@
 import React from 'react'
 import { VeramoProvider } from '@veramo-community/veramo-react'
 import { useWeb3React } from '@web3-react/core'
-import { useEagerConnect, useInactiveListener } from './hooks'
-import { createWeb3Agent } from './web3Agent'
-import { createClientAgent } from './clientAgent'
-import { ProfileManager } from './ProfileManager'
+import { useEagerConnect } from '../../hooks/useEagerConnect'
+import { useInactiveListener } from '../../hooks/useInactiveListener'
+import { createWeb3Agent } from '../../veramo-web3/web3Agent'
+import { createClientAgent } from '../../veramo-web3/clientAgent'
+import { ProfileManager } from '../../veramo-web3/ProfileManager'
 
 
 export const VeramoWeb3Provider = (props: {children: any}) => {

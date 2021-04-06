@@ -1,7 +1,7 @@
 import React from 'react'
 import { useQuery } from 'react-query'
 import { useVeramo } from '@veramo-community/veramo-react'
-import { IProfileManager } from './web3/ProfileManager'
+import { IProfileManager } from './veramo-web3/ProfileManager'
 import { Avatar } from 'antd'
 
 interface Props {
