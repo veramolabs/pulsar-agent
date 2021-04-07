@@ -4,6 +4,7 @@ constants:
   baseUrl: https://e23152b060bc.ngrok.io
   port: 3332
   secretKey: 29739248cad1bd1a0fc4d9b75cd4d2990de535baf5caadfdf8d8f86664aa830c
+  openSeaApiKey: REPLACE_WITH_KEY
   databaseFile: ./db/database.sqlite
   methods:
     - keyManagerGetKeyManagementSystems
@@ -165,6 +166,14 @@ server:
           - null
           - swaggerOptions:
               url: '/api'
+
+    # Opensea Router
+    - - '/opensea'
+      - $require: './build/opensea-router?t=function#OpenSeaRouter'
+        $args:
+          - openSeaApiKey:
+              $ref: /constants/openSeaApiKey
+            routePrefix: '/opensea'
 
     # Frontend app
     - - '/'
