@@ -29,6 +29,7 @@ const Post = () => {
         nickname: did,
         picture: "",
         currentOwner: { user: { username: "" } },
+        permalink: "https://opensea.io/",
       },
     }
   );
@@ -74,13 +75,13 @@ const Post = () => {
               <div
                 style={{ flex: 1, display: "flex", justifyContent: "flex-end" }}
               >
-                {data.currentOwner && (
+                {data.permalink && (
                   <Button
                     type="default"
                     size="large"
                     shape="round"
                     onClick={() =>
-                      (window.location.href = `https://opensea.io/accounts/${data?.currentOwner.user.username}`)
+                      (window.location.href = `${data?.permalink}`)
                     }
                   >
                     View on OpenSea

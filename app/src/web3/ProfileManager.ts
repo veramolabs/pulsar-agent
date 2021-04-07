@@ -15,7 +15,8 @@ export interface IProfile {
   name?: string
   nickname?: string
   picture?: string
-  currentOwner?: any
+  currentOwner?: any,
+  permalink?: string
 }
 
 type IContext = IAgentContext<IDataStoreORM>
@@ -77,7 +78,8 @@ export class ProfileManager implements IAgentPlugin {
         name: asset?.name,
         nickname: asset?.description,
         picture: asset?.image_preview_url,
-        currentOwner: asset?.top_ownerships[0].owner
+        currentOwner: asset?.top_ownerships[0].owner,
+        permalink: asset?.permalink
       }
     }
 
