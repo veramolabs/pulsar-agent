@@ -34,6 +34,10 @@
         "description": "Secret key for database encryption",
         "generator": "secret"
       },
+      "OPENSEA_API_KEY": {
+        "description": "Secret key for opensea API",
+        "value": "REPLACE_WITH_KEY"
+      },
       "AGENT_ENDPOINT": {
         "description": "Prefix for agent endpoints",
         "value": "/agent"
