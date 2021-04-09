@@ -1,5 +1,4 @@
-import { Web3Provider } from '@ethersproject/providers'
-import { TKeyType, IKey, EcdsaSignature } from '@veramo/core'
+import { TKeyType, IKey } from '@veramo/core'
 import { AbstractKeyManagementSystem } from '@veramo/key-manager'
 import { normalizeCredential } from 'did-jwt-vc'
 
@@ -98,10 +97,9 @@ export class Web3KeyManagementSystem extends AbstractKeyManagementSystem {
   }: {
     key: IKey
     data: string
-  }): Promise<EcdsaSignature | string> {
+  }): Promise<string> {
     // const p = await this.provider as any
-    const web3Provider = new Web3Provider(this.provider)
-    const { chainId } = await web3Provider.getNetwork()
+    const { chainId } = await this.provider.getNetwork()
 
     // Hacky payload transformation
     const w3c_vc = normalizeCredential(`${data}.signature`) as any
@@ -109,7 +107,7 @@ export class Web3KeyManagementSystem extends AbstractKeyManagementSystem {
     delete w3c_vc.proof
 
     // signature is 0x hex endcoded.
-    const signature = await web3Provider.getSigner()._signTypedData(getDomain(chainId), getEIP712Schema(), w3c_vc)
+    const signature = await this.provider.getSigner()._signTypedData(getDomain(chainId), getEIP712Schema(), w3c_vc)
     return 'WEB3' + signature
   }
 }

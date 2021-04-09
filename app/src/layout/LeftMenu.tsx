@@ -1,6 +1,6 @@
 import React from "react";
 import { Menu } from "antd";
-import { HomeOutlined, SearchOutlined, MessageOutlined } from "@ant-design/icons";
+import { HomeOutlined, SearchOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
 const mainMenu = [
