@@ -67,7 +67,7 @@ const Stream: React.FC<Props> = ({
       itemLayout="vertical"
       size="large"
       dataSource={credentials?.filter((item) => {
-        return did ? item.verifiableCredential.issuer.id == did : item;
+        return did ? item.verifiableCredential.issuer.id === did : item;
       })}
       loading={isLoading}
       renderItem={(item) => {

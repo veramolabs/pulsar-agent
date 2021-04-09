@@ -10,7 +10,7 @@ const DMSetup = () => {
   >(undefined);
   const [owner, setOwner] = useState<string | undefined>(undefined);
 
-  const { getAgent } = useVeramo();
+  const { getAgent } = useVeramo<IDIDManager & IResolver>();
 
   let agent: TAgent<IDIDManager & IResolver> | undefined;
 
@@ -27,6 +27,7 @@ const DMSetup = () => {
           return owner;
         })
         .then(({ did }) => agent?.resolveDid({ didUrl: did }))
+        .then(result => result?.didDocument)
         .then((didDoc) => {
           const service = didDoc?.service?.find((s) => s.type === "Messaging");
           if (service) {

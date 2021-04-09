@@ -6,17 +6,15 @@ import {
   IKey,
 } from '@veramo/core'
 import { CredentialIssuer, W3cMessageHandler } from '@veramo/credential-w3c'
-import { DIDManager } from '@veramo/did-manager'
+import { DIDManager, MemoryDIDStore } from '@veramo/did-manager'
 import { DIDResolverPlugin } from '@veramo/did-resolver'
 import { DIDComm } from '@veramo/did-comm'
-import { KeyManager } from '@veramo/key-manager'
+import { KeyManager, MemoryKeyStore } from '@veramo/key-manager'
 import { SdrMessageHandler } from '@veramo/selective-disclosure'
 import { JwtMessageHandler } from '@veramo/did-jwt'
 import { DIDCommMessageHandler } from '@veramo/did-comm'
 import { MessageHandler } from '@veramo/message-handler'
-import { MemoryDIDStore } from './DIDStore'
 import { Web3KeyManagementSystem } from './KeyManagementSystem'
-import { MemoryKeyStore } from './KeyStore'
 import { NFTResolver } from './NFTResolver'
 import { Resolver } from 'did-resolver'
 import { getResolver as ethrDidResolver } from 'ethr-did-resolver'
@@ -25,7 +23,7 @@ import { EthrDIDProvider } from '@veramo/did-provider-ethr'
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { ProfileManager } from './ProfileManager'
 import { Web3JwtMessageHandler } from './Web3JWTMessageHandler'
-import { DataStore } from './data-store'
+import { Web3Provider } from '@ethersproject/providers'
 export async function createWeb3Agent({
   connector,
   chainId,
@@ -36,21 +34,27 @@ export async function createWeb3Agent({
   account: string
 }) {
   const id = 'web3Agent'
-  const web3Provider = await connector.getProvider()
+  const web3Provider = new Web3Provider(await connector.getProvider())
+
   const agent = createAgent<IDIDManager & IKeyManager & IResolver>({
     context: {
       id,
       name: `Web3 injected ${chainId}`,
     },
     plugins: [
-      new DataStore(),
       new DIDResolverPlugin({
         resolver: new Resolver({
           ethr: ethrDidResolver({
-            provider: web3Provider,
+            networks: [
+              { name: 'mainnet', provider: web3Provider }
+            ]
           }).ethr,
           web: webDidResolver().web,
-          nft: NFTResolver({ provider: web3Provider }),
+          nft: NFTResolver({ 
+            networks: [
+              { name: 'mainnet', provider: web3Provider }
+            ]
+          }),
         }),
       }),
       new KeyManager({
@@ -85,16 +89,19 @@ export async function createWeb3Agent({
     ],
   })
 
-  const didDoc = await agent.resolveDid({
+  const result = await agent.resolveDid({
     didUrl: `did:ethr:${account}`,
   })
+
+  if (!result.didDocument || !result.didDocument.verificationMethod) throw Error('No did document')
+  const {didDocument} = result
 
   await agent.didManagerImport({
     did: `did:ethr:${account}`,
     provider: 'did:ethr',
     alias: 'owner',
-    controllerKeyId: didDoc.id + '#controller',
-    keys: didDoc.publicKey.map(
+    controllerKeyId: didDocument.id + '#controller',
+    keys: didDocument.verificationMethod?.map(
       (pub) =>
         ({
           kid: pub.id,
@@ -102,8 +109,8 @@ export async function createWeb3Agent({
           kms: 'web3',
           publicKeyHex: pub.publicKeyHex,
         } as IKey),
-    ),
-    services: didDoc.service || [],
+    ) || [],
+    services: didDocument.service || [],
   })
 
   try {
@@ -117,8 +124,8 @@ export async function createWeb3Agent({
       await agent.didManagerImport({
         did: `did:nft:0x${chainId}:${asset.asset_contract.address}:${asset.token_id}`,
         provider: 'did:nft',
-        controllerKeyId: didDoc.id + '#controller',
-        keys: didDoc.publicKey.map(
+        controllerKeyId: didDocument.id + '#controller',
+        keys: didDocument.verificationMethod?.map(
           (pub) =>
             ({
               kid: pub.id,
@@ -126,8 +133,8 @@ export async function createWeb3Agent({
               kms: 'web3',
               publicKeyHex: pub.publicKeyHex,
             } as IKey),
-        ),
-        services: didDoc.service || [],
+        ) || [],
+        services: didDocument.service || [],
       })
     }
   } catch (e) {

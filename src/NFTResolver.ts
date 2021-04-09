@@ -15,7 +15,9 @@ export function NFTResolver(config: any) {
     //FIXME
     const ethrDid = 'did:ethr:' + res.top_ownerships[0].owner.address
     const parsed = parse(ethrDid)
-    const didDoc = resolve(ethrDid, parsed)
+    if (parsed === null) throw Error('Cannot parse did')
+    // @ts-ignore
+    const didDoc = resolve(ethrDid, parsed, null, null)
     return didDoc
   }
 }

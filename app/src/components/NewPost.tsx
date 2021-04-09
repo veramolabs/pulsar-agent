@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Input, notification, Progress, Card, Tag } from "antd";
 import { useVeramo } from "@veramo-community/veramo-react";
 import { IDIDManager, IDataStore, TAgent, IMessageHandler } from "@veramo/core";
+import { IDIDComm } from "@veramo/did-comm";
 import shortId from "shortid";
 import { IProfileManager } from "../veramo-web3/ProfileManager";
 import { useQuery } from "react-query";
@@ -16,10 +17,10 @@ interface Props {
 
 const NewPost: React.FC<Props> = (props: Props) => {
   const { getAgent } = useVeramo<
-    IDIDManager & IDataStore & IProfileManager & IMessageHandler
+    IDIDManager & IDataStore & IProfileManager & IMessageHandler & IDIDComm
   >();
   let agent: TAgent<
-    IDIDManager & IDataStore & IProfileManager & IMessageHandler
+    IDIDManager & IDataStore & IProfileManager & IMessageHandler & IDIDComm
   > | undefined;
   try {
     agent = getAgent("web3Agent");
@@ -134,8 +135,9 @@ const NewPost: React.FC<Props> = (props: Props) => {
         const to = props.recipientDid || process.env.REACT_APP_DEFAULT_RECIPIENT
 
         await agent?.sendMessageDIDCommAlpha1({
+          save: false,
           data: {
-            from: selectedDid,
+            from: selectedDid as string,
             to,
             body: verifiableCredential.proof.jwt,
             type: "jwt",
