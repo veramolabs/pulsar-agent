@@ -50,9 +50,8 @@ const getDomain = (activeChainId: number) => ({
 
 const checkSigningAddressInDidDoc = (signingAddress: string, didDoc: DIDDocument) => {
   // collect all ethereumAddress from didDoc.publicKey
-  const ethereumAddresses = didDoc.publicKey.filter( x => 'ethereumAddress' in x && x.ethereumAddress).map(x => x.ethereumAddress?.toLowerCase())
-
-  if (!ethereumAddresses.includes(signingAddress.toLowerCase())) {
+  const ethereumAddresses = didDoc?.publicKey?.filter( x => 'ethereumAddress' in x && x.ethereumAddress).map(x => x.ethereumAddress?.toLowerCase())
+  if (!ethereumAddresses?.includes(signingAddress.toLowerCase())) {
     throw new Error(`Message was not signed by an ethereumAddress in ${didDoc.id}`)
   }
 }
