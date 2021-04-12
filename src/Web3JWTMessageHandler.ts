@@ -48,14 +48,29 @@ const getDomain = (activeChainId: number) => ({
   chainId: activeChainId,
 })
 
-const checkSigningAddressInDidDoc = (signingAddress: string, didDoc: DIDDocument) => {
-  // collect all ethereumAddress from didDoc.publicKey
-  const ethereumAddresses = didDoc.publicKey.filter( x => 'ethereumAddress' in x && x.ethereumAddress).map(x => x.ethereumAddress?.toLowerCase())
-
-  if (!ethereumAddresses.includes(signingAddress.toLowerCase())) {
-    throw new Error(`Message was not signed by an ethereumAddress in ${didDoc.id}`)
+const checkSigningAddressInDidDoc = (
+  signingAddress: string,
+  didDoc: DIDDocument
+) => {
+  // collect all ethereum addresses from didDoc.publicKey and didDoc.verificationMethod
+  const publicKeysToCheck = [
+    ...(didDoc?.publicKey || []),
+    ...(didDoc?.verificationMethod || []),
+  ];
+  const ethereumAddresses = publicKeysToCheck
+    .filter((x) => typeof x.ethereumAddress !== "undefined")
+    .map((x) => x.ethereumAddress?.toLowerCase());
+  const blockchainAccounts = publicKeysToCheck
+    .filter((pk) => typeof pk.blockchainAccountId !== "undefined")
+    .map((pk) => (pk.blockchainAccountId || "").split("@eip155")[0])
+    .map((address) => address.toLowerCase());
+  const allAddresses = [...ethereumAddresses, ...blockchainAccounts];
+  if (!allAddresses?.includes(signingAddress.toLowerCase())) {
+    throw new Error(
+      `Message was not signed by an ethereumAddress in ${didDoc.id}`
+    );
   }
-}
+};
 
 export class Web3JwtMessageHandler extends AbstractMessageHandler {
   async handle(message: Message, context: IContext): Promise<Message> {
@@ -70,7 +85,7 @@ export class Web3JwtMessageHandler extends AbstractMessageHandler {
           // Fix signing output
           delete w3c_vc.proof
 
-          // Verify Typed Web3 Signature:
+          // // Verify Typed Web3 Signature:
           // const signingAddress = verifyTypedData(getDomain(1), getEIP712Schema(), w3c_vc, decoded.signature.slice(4))
 
           // // You need this for local development because of Opensea Rate limiting
@@ -78,7 +93,7 @@ export class Web3JwtMessageHandler extends AbstractMessageHandler {
 
           // // Check SigningAddress against issuer did:
           // const didUrl = w3c_vc.issuer?.id?.toLowerCase()
-          // const didDoc = await context.agent.resolveDid( { didUrl } )
+          // const didDoc = (await context.agent.resolveDid( { didUrl } )).didDocument as DIDDocument
 
           // // check signing Address
           // checkSigningAddressInDidDoc(signingAddress, didDoc)
