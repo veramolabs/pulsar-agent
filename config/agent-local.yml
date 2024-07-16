@@ -236,8 +236,8 @@ nft-did-resolver:
           rpcUrl: https://ropsten.infura.io/v3/5ffc47f65c4042ce847ef66a3fa70d4c
         - name: kovan
           rpcUrl: https://kovan.infura.io/v3/5ffc47f65c4042ce847ef66a3fa70d4c
-        - name: goerli
-          rpcUrl: https://goerli.infura.io/v3/5ffc47f65c4042ce847ef66a3fa70d4c
+        - name: sepolia
+          rpcUrl: https://sepolia.infura.io/v3/5ffc47f65c4042ce847ef66a3fa70d4c
         - name: private
           rpcUrl: http://localhost:8545/
           registry: '0x05cc574b19a3c11308f761b3d7263bd8608bc532'
@@ -254,8 +254,8 @@ ethr-did-resolver:
           rpcUrl: https://ropsten.infura.io/v3/5ffc47f65c4042ce847ef66a3fa70d4c
         - name: kovan
           rpcUrl: https://kovan.infura.io/v3/5ffc47f65c4042ce847ef66a3fa70d4c
-        - name: goerli
-          rpcUrl: https://goerli.infura.io/v3/5ffc47f65c4042ce847ef66a3fa70d4c
+        - name: sepolia
+          rpcUrl: https://sepolia.infura.io/v3/5ffc47f65c4042ce847ef66a3fa70d4c
         - name: private
           rpcUrl: http://localhost:8545/
           registry: '0x05cc574b19a3c11308f761b3d7263bd8608bc532'
@@ -325,12 +325,12 @@ didManager:
               rpcUrl: https://kovan.infura.io/v3/5ffc47f65c4042ce847ef66a3fa70d4c
               gas: 1000001
               ttl: 31104001
-        did:ethr:goerli:
+        did:ethr:sepolia:
           $require: '@veramo/did-provider-ethr#EthrDIDProvider'
           $args:
             - defaultKms: local
-              network: goerli
-              rpcUrl: https://goerli.infura.io/v3/5ffc47f65c4042ce847ef66a3fa70d4c
+              network: sepolia
+              rpcUrl: https://sepolia.infura.io/v3/5ffc47f65c4042ce847ef66a3fa70d4c
               gas: 1000001
               ttl: 31104001
         did:web:
